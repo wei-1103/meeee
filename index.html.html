@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>StudentOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0eeeb;
+  --bg2: #e8e6e2;
+  --surface: #faf9f7;
+  --surface2: #f4f2ef;
+  --border: #dedad5;
+  --border2: #ccc9c3;
+  --text: #1a1816;
+  --text2: #5a5550;
+  --text3: #9a948e;
+  --accent: #6b5c4e;
+  --accent2: #4a7c6f;
+  --accent3: #c4773a;
+  --accent4: #b85c5c;
+  --accent5: #5b7fa6;
+  --tab-h: 68px;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── SCROLL AREA ── */
+.scroll-area {
+  padding: 0 16px calc(var(--tab-h) + 24px);
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  padding: 52px 16px 16px;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.topbar-title {
+  font-family: 'Shippori Mincho', serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.topbar-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.topbar-date {
+  font-size: 12px;
+  color: var(--text3);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ── TAB BAR ── */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--tab-h);
+  background: rgba(250,249,247,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding-top: 8px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.tab-icon {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.tab-label {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+.tab-item.active .tab-icon { transform: scale(1.1); }
+.tab-item.active .tab-label { color: var(--accent); font-weight: 500; }
+
+/* ── PAGE ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── SECTION ── */
+.section-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 13px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  margin: 24px 0 10px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── STAT ROW ── */
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+
+.stat-val {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-note { font-size: 11px; color: var(--text3); }
+
+/* ── COUNTDOWN BOX ── */
+.countdown-card {
+  background: var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countdown-left .cd-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans TC';
+}
+
+.countdown-left .cd-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.countdown-left .cd-date {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+.cd-days {
+  text-align: right;
+}
+
+.cd-days .num {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 52px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.cd-days .unit {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+}
+
+/* ── PROGRESS ── */
+.prog-wrap { margin-bottom: 12px; }
+.prog-wrap:last-child { margin-bottom: 0; }
+
+.prog-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.prog-label { font-size: 13px; color: var(--text2); }
+.prog-pct { font-size: 12px; color: var(--text3); }
+
+.prog-track {
+  height: 5px;
+  background: var(--bg2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+/* Editable progress */
+.prog-fill[data-editable] { cursor: pointer; }
+
+/* ── EDITABLE VALUES ── */
+[contenteditable="true"] {
+  outline: none;
+  border-bottom: 1.5px solid var(--accent3);
+  padding-bottom: 1px;
+  min-width: 20px;
+  display: inline-block;
+}
+
+.edit-hint {
+  font-size: 10px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── TODO LIST ── */
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.todo-item:last-child { border-bottom: none; }
+
+.todo-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  transition: all 0.2s;
+}
+
+.todo-item.done .todo-check {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.5;
+  transition: all 0.2s;
+}
+
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: var(--text3);
+}
+
+.todo-tag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--surface2);
+  color: var(--text3);
+}
+
+.todo-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 0;
+  margin-top: 2px;
+}
+
+.todo-add input {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid var(--border2);
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  outline: none;
+}
+
+.todo-add input::placeholder { color: var(--text3); font-size: 13px; }
+
+.todo-add button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* ── HABIT GRID ── */
+.habit-days-header {
+  display: grid;
+  grid-template-columns: 100px repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.hd-label {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.habit-row {
+  display: grid;
+  grid-template-columns: 100px repeat(7, 1fr);
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.habit-name { font-size: 12px; color: var(--text2); }
+
+.hday {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: transparent;
+  transition: all 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.hday.done { color: rgba(0,0,0,0.35); border-color: transparent; }
+.hday:active { transform: scale(0.88); }
+
+/* ── COURSE TABLE ── */
+.course-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.course-item:last-child { border-bottom: none; }
+
+.course-name {
+  font-size: 14px;
+  color: var(--text2);
+  flex: 1;
+}
+
+.course-credit {
+  font-size: 12px;
+  color: var(--text3);
+  margin-right: 10px;
+}
+
+.course-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ── FINANCE ── */
+.finance-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.finance-item:last-child { border-bottom: none; }
+.finance-cat { font-size: 14px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
+.finance-amount { font-size: 14px; font-weight: 500; }
+.finance-amount.inc { color: var(--accent2); }
+.finance-amount.exp { color: var(--accent4); }
+
+/* ── INLINE EDITOR ── */
+.inline-edit {
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid var(--accent3);
+  padding: 1px 2px;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  width: 60px;
+  outline: none;
+  text-align: right;
+}
+
+/* ── STATUS ── */
+.status {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.s-todo { background: var(--surface2); color: var(--text3); }
+.s-doing { background: rgba(196,119,58,0.12); color: var(--accent3); }
+.s-done { background: rgba(74,124,111,0.12); color: var(--accent2); }
+
+/* ── MORE PAGE ── */
+.more-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.more-item:last-child { border-bottom: none; }
+.more-left { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text2); }
+.more-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  background: var(--surface2);
+}
+.more-arrow { color: var(--text3); font-size: 16px; }
+
+/* ── SAVINGS RING ── */
+.savings-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 4px 0;
+}
+
+.ring-container { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+.ring-container svg { width: 80px; height: 80px; transform: rotate(-90deg); }
+.ring-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.ring-pct {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.ring-sub { font-size: 9px; color: var(--text3); }
+
+.savings-detail { flex: 1; }
+.savings-label { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+.savings-val {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.savings-target { font-size: 12px; color: var(--text3); }
+
+/* ── ANIM ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page.active > * {
+  animation: fadeUp 0.3s ease both;
+}
+
+.page.active > *:nth-child(2) { animation-delay: 0.04s; }
+.page.active > *:nth-child(3) { animation-delay: 0.08s; }
+.page.active > *:nth-child(4) { animation-delay: 0.12s; }
+.page.active > *:nth-child(5) { animation-delay: 0.16s; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* ── PROGRESS SLIDER POPUP ── */
+.slider-popup {
+  position: fixed;
+  bottom: calc(var(--tab-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  width: calc(100% - 32px);
+  max-width: 398px;
+  z-index: 300;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  display: none;
+}
+
+.slider-popup.show { display: block; animation: fadeUp 0.2s ease; }
+.slider-title { font-family: 'Shippori Mincho', serif; font-size: 14px; margin-bottom: 12px; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  background: var(--bg2);
+  border-radius: 99px;
+  outline: none;
+  margin: 8px 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.slider-val {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.slider-actions { display: flex; gap: 8px; margin-top: 12px; }
+.btn-save {
+  flex: 1; background: var(--accent); color: #fff;
+  border: none; border-radius: 8px; padding: 10px;
+  font-size: 14px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+}
+.btn-cancel {
+  background: var(--surface2); color: var(--text2);
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px;
+  font-size: 14px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* ── RECORD POPUP ── */
+.record-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 400;
+  display: none;
+  align-items: flex-end;
+}
+
+.record-popup.show { display: flex; }
+
+.record-sheet {
+  background: var(--surface);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 20px 20px 36px;
+  width: 100%;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.record-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn { font-size: 20px; color: var(--text3); cursor: pointer; background: none; border: none; }
+
+.record-field {
+  margin-bottom: 14px;
+}
+
+.record-field label {
+  font-size: 12px;
+  color: var(--text3);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.record-field input, .record-field select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.record-field input:focus, .record-field select:focus {
+  border-color: var(--accent3);
+}
+</style>
+</head>
+<body>
+
+<!-- PAGES WRAPPER -->
+<div id="app">
+
+<!-- ═══ PAGE: HOME ═══ -->
+<div class="page active" id="page-home">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">今日</div>
+      <div class="topbar-sub">大三下學期・資工系</div>
+    </div>
+    <div class="topbar-date" id="today-str"></div>
+  </div>
+  <div class="scroll-area">
+
+    <!-- Countdown -->
+    <div class="countdown-card">
+      <div class="countdown-left">
+        <div class="cd-label">考試倒數</div>
+        <div class="cd-title">🎌 JLPT N2</div>
+        <div class="cd-date">2025年7月5日</div>
+      </div>
+      <div class="cd-days">
+        <div class="num" id="n2-days">--</div>
+        <div class="unit">天</div>
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="stat-row">
+      <div class="stat-tile">
+        <div class="stat-label">已修學分</div>
+        <div class="stat-val" style="color:var(--accent5)">87</div>
+        <div class="stat-note">/ 128 目標</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">本月結餘</div>
+        <div class="stat-val" style="color:var(--accent2)">2,340</div>
+        <div class="stat-note">TWD ↑</div>
+      </div>
+    </div>
+
+    <!-- Today's todo -->
+    <div class="card">
+      <div class="card-title">
+        今日待辦
+        <span style="font-size:12px;color:var(--text3);font-family:'Noto Sans TC'" id="todo-count"></span>
+      </div>
+      <div id="todo-list">
+        <div class="todo-item" onclick="toggleTodo(this)">
+          <div class="todo-check"></div>
+          <div class="todo-text">N2 模擬測驗 第14回</div>
+          <div class="todo-tag" style="background:rgba(107,92,78,0.1);color:var(--accent)">日語</div>
+        </div>
+        <div class="todo-item" onclick="toggleTodo(this)">
+          <div class="todo-check"></div>
+          <div class="todo-text">作業系統 Ch.8 複習</div>
+          <div class="todo-tag" style="background:rgba(91,127,166,0.1);color:var(--accent5)">課業</div>
+        </div>
+        <div class="todo-item done" onclick="toggleTodo(this)">
+          <div class="todo-check">✓</div>
+          <div class="todo-text">更新 GitHub README</div>
+          <div class="todo-tag">專案</div>
+        </div>
+        <div class="todo-item" onclick="toggleTodo(this)">
+          <div class="todo-check"></div>
+          <div class="todo-text">記帳：今日支出</div>
+          <div class="todo-tag" style="background:rgba(74,124,111,0.1);color:var(--accent2)">理財</div>
+        </div>
+      </div>
+      <div class="todo-add">
+        <input type="text" id="new-todo-input" placeholder="新增待辦…" onkeydown="if(event.key==='Enter')addTodo()">
+        <button onclick="addTodo()">＋ 新增</button>
+      </div>
+    </div>
+
+    <!-- N2 Progress quick view -->
+    <div class="card">
+      <div class="card-title">
+        N2 備考進度
+        <span style="font-size:11px;color:var(--accent3);cursor:pointer" onclick="openSlider('n2-all')">編輯</span>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header">
+          <span class="prog-label">📖 單字</span>
+          <span class="prog-pct" id="pct-vocab">68%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="bar-vocab" style="width:68%;background:var(--accent)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header">
+          <span class="prog-label">✏️ 語法</span>
+          <span class="prog-pct" id="pct-grammar">52%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="bar-grammar" style="width:52%;background:var(--accent5)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header">
+          <span class="prog-label">🎧 聽力</span>
+          <span class="prog-pct" id="pct-listen">40%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="bar-listen" style="width:40%;background:var(--accent2)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header">
+          <span class="prog-label">📝 讀解</span>
+          <span class="prog-pct" id="pct-read">35%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="bar-read" style="width:35%;background:var(--accent3)"></div></div>
+      </div>
+      <div class="edit-hint">✎ 點「編輯」可滑動調整各科進度</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE: HABITS ═══ -->
+<div class="page" id="page-habits">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">習慣追蹤</div>
+      <div class="topbar-sub">本週打卡・點格子切換</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+
+    <div class="card">
+      <div class="card-title">
+        本週習慣
+        <span style="font-size:12px;color:var(--text3)" id="habit-rate"></span>
+      </div>
+      <div class="habit-days-header">
+        <div></div>
+        <div class="hd-label">一</div>
+        <div class="hd-label">二</div>
+        <div class="hd-label">三</div>
+        <div class="hd-label">四</div>
+        <div class="hd-label">五</div>
+        <div class="hd-label">六</div>
+        <div class="hd-label">日</div>
+      </div>
+      <div id="habit-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">本月統計</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">🏃 運動</span><span class="prog-pct">18/30天</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:60%;background:var(--accent2)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">📖 閱讀30分</span><span class="prog-pct">22/30天</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:73%;background:var(--accent5)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">🎌 日語練習</span><span class="prog-pct">25/30天</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:83%;background:var(--accent)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">💻 Coding 1hr</span><span class="prog-pct">15/30天</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:50%;background:var(--accent3)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">💤 23點就寢</span><span class="prog-pct">12/30天</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:40%;background:var(--accent4)"></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="background:rgba(74,124,111,0.08);border-color:rgba(74,124,111,0.2)">
+      <div style="font-size:13px;color:var(--accent2);line-height:2">
+        🏆 最佳連續：<strong>日語練習 11天</strong><br>
+        ⚠️ 最需加強：<strong style="color:var(--accent4)">早睡（40%）</strong><br>
+        📊 本週完成率：<strong id="habit-pct-text">計算中</strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE: COURSES ═══ -->
+<div class="page" id="page-courses">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">學分規劃</div>
+      <div class="topbar-sub">畢業學分檢核</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+
+    <div class="stat-row">
+      <div class="stat-tile">
+        <div class="stat-label">已修</div>
+        <div class="stat-val" style="color:var(--accent)">87</div>
+        <div class="stat-note">/ 128 學分</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">GPA</div>
+        <div class="stat-val" style="color:var(--accent3)">3.68</div>
+        <div class="stat-note">累積</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">畢業學分進度</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">必修</span><span class="prog-pct">72/80</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:90%;background:var(--accent5)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">選修</span><span class="prog-pct">15/32</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:47%;background:var(--accent)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span class="prog-label">通識</span><span class="prog-pct">10/16</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:62%;background:var(--accent3)"></div></div>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:var(--text3)">尚需完成 <strong style="color:var(--accent4)">41</strong> 學分・預計大四修畢</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">113-2 本學期課程</div>
+      <div class="course-item">
+        <span class="course-name">資訊安全概論</span>
+        <span class="course-credit">3學分</span>
+        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">作業系統</span>
+        <span class="course-credit">3學分</span>
+        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">計算機網路</span>
+        <span class="course-credit">3學分</span>
+        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">演算法設計</span>
+        <span class="course-credit">3學分</span>
+        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">日語文法進階</span>
+        <span class="course-credit">2學分</span>
+        <span class="course-badge" style="background:rgba(196,119,58,0.12);color:var(--accent3)">通識</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">專題研究(一)</span>
+        <span class="course-credit">2學分</span>
+        <span class="course-badge" style="background:rgba(107,92,78,0.1);color:var(--accent)">選修</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">體育（羽球）</span>
+        <span class="course-credit">1學分</span>
+        <span class="course-badge" style="background:rgba(74,124,111,0.12);color:var(--accent2)">體育</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">資安證照路徑</div>
+      <div class="course-item">
+        <span class="course-name">CompTIA Security+</span>
+        <span class="status s-doing">備考中</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">CEH 道德駭客</span>
+        <span class="status s-todo">規劃中</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">OSCP</span>
+        <span class="status s-todo">長期目標</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE: FINANCE ═══ -->
+<div class="page" id="page-finance">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">理財</div>
+      <div class="topbar-sub">收支管理・存款目標</div>
+    </div>
+    <button onclick="openRecord()" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif">＋ 記帳</button>
+  </div>
+  <div class="scroll-area">
+
+    <!-- Savings ring -->
+    <div class="card">
+      <div class="card-title">交換學生基金</div>
+      <div class="savings-wrap">
+        <div class="ring-container">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#e8e6e2" stroke-width="8"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#4a7c6f" stroke-width="8"
+              stroke-dasharray="201.06" stroke-dashoffset="103.55" stroke-linecap="round"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct">48%</div>
+            <div class="ring-sub">達成</div>
+          </div>
+        </div>
+        <div class="savings-detail">
+          <div class="savings-label">目前存款</div>
+          <div class="savings-val">
+            <span id="savings-now" contenteditable="true" onblur="updateSavings()">48,500</span>
+          </div>
+          <div class="savings-target">目標：<span id="savings-goal" contenteditable="true" onblur="updateSavings()">100,000</span> TWD</div>
+          <div style="font-size:11px;color:var(--accent4);margin-top:6px">還差 51,500 元 · 每月需存約 7,357</div>
+        </div>
+      </div>
+      <div class="edit-hint">✎ 點金額可直接編輯</div>
+    </div>
+
+    <!-- Month summary -->
+    <div class="card">
+      <div class="card-title">
+        本月收支
+        <span style="font-size:13px;font-weight:700;color:var(--accent2)">+2,340</span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">🎓 獎學金</span>
+        <span class="finance-amount inc">+5,000</span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">👨‍👩‍👧 家庭生活費</span>
+        <span class="finance-amount inc">+8,000</span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">💻 接案收入</span>
+        <span class="finance-amount inc">+2,000</span>
+      </div>
+      <div class="divider"></div>
+      <div class="finance-item">
+        <span class="finance-cat">🍜 餐飲</span>
+        <span class="finance-amount exp">−<input class="inline-edit" value="4,200" onchange="recalc()"></span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">📚 教材書籍</span>
+        <span class="finance-amount exp">−<input class="inline-edit" value="1,800" onchange="recalc()"></span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">🚌 交通</span>
+        <span class="finance-amount exp">−<input class="inline-edit" value="980" onchange="recalc()"></span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">📱 手機網路</span>
+        <span class="finance-amount exp">−<input class="inline-edit" value="699" onchange="recalc()"></span>
+      </div>
+      <div class="finance-item">
+        <span class="finance-cat">🎮 娛樂</span>
+        <span class="finance-amount exp">−<input class="inline-edit" value="1,200" onchange="recalc()"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE: MORE ═══ -->
+<div class="page" id="page-more">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">更多</div>
+      <div class="topbar-sub">職涯・交換・社交・股票</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+
+    <div class="card">
+      <div class="more-item">
+        <div class="more-left">
+          <div class="more-icon">🛡️</div>
+          <div>
+            <div style="font-size:14px;color:var(--text)">證照衝刺</div>
+            <div style="font-size:11px;color:var(--text3)">Security+ 備考中</div>
+          </div>
+        </div>
+        <div class="more-arrow">›</div>
+      </div>
+      <div class="more-item">
+        <div class="more-left">
+          <div class="more-icon">✈️</div>
+          <div>
+            <div style="font-size:14px;color:var(--text)">交換生申請</div>
+            <div style="font-size:11px;color:var(--text3)">3/8 材料完成</div>
+          </div>
+        </div>
+        <div class="more-arrow">›</div>
+      </div>
+      <div class="more-item">
+        <div class="more-left">
+          <div class="more-icon">🗂️</div>
+          <div>
+            <div style="font-size:14px;color:var(--text)">專案作品集</div>
+            <div style="font-size:11px;color:var(--text3)">2 個完成 · 1 開發中</div>
+          </div>
+        </div>
+        <div class="more-arrow">›</div>
+      </div>
+      <div class="more-item">
+        <div class="more-left">
+          <div class="more-icon">📈</div>
+          <div>
+            <div style="font-size:14px;color:var(--text)">股票觀察清單</div>
+            <div style="font-size:11px;color:var(--text3)">台積電、群創、0050</div>
+          </div>
+        </div>
+        <div class="more-arrow">›</div>
+      </div>
+      <div class="more-item" style="border-bottom:none">
+        <div class="more-left">
+          <div class="more-icon">💜</div>
+          <div>
+            <div style="font-size:14px;color:var(--text)">社交能量日誌</div>
+            <div style="font-size:11px;color:var(--text3)">本週能量：尚可</div>
+          </div>
+        </div>
+        <div class="more-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Year goals -->
+    <div class="card">
+      <div class="card-title">2025 年度目標</div>
+      <div class="course-item">
+        <span class="course-name">通過 JLPT N2</span>
+        <span class="status s-doing">準備中</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">取得 Security+ 認證</span>
+        <span class="status s-doing">備考中</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">提交交換生申請</span>
+        <span class="status s-todo">未開始</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">存款達 10 萬元</span>
+        <span class="status s-doing">48%</span>
+      </div>
+      <div class="course-item">
+        <span class="course-name">完成 2 個個人專案</span>
+        <span class="status s-doing">1/2</span>
+      </div>
+      <div class="course-item" style="border:none">
+        <span class="course-name">維持 GPA 3.7 以上</span>
+        <span class="status s-done">✓ 3.68</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end #app -->
+
+<!-- ═══ TAB BAR ═══ -->
+<nav class="tabbar">
+  <div class="tab-item active" onclick="switchTab('home',this)">
+    <div class="tab-icon">🏠</div>
+    <div class="tab-label">首頁</div>
+  </div>
+  <div class="tab-item" onclick="switchTab('habits',this)">
+    <div class="tab-icon">✅</div>
+    <div class="tab-label">習慣</div>
+  </div>
+  <div class="tab-item" onclick="switchTab('courses',this)">
+    <div class="tab-icon">📚</div>
+    <div class="tab-label">學分</div>
+  </div>
+  <div class="tab-item" onclick="switchTab('finance',this)">
+    <div class="tab-icon">💰</div>
+    <div class="tab-label">理財</div>
+  </div>
+  <div class="tab-item" onclick="switchTab('more',this)">
+    <div class="tab-icon">☰</div>
+    <div class="tab-label">更多</div>
+  </div>
+</nav>
+
+<!-- ═══ SLIDER POPUP ═══ -->
+<div class="slider-popup" id="slider-popup">
+  <div class="slider-title" id="slider-title">調整進度</div>
+  <div class="slider-val"><span id="slider-display">0</span>%</div>
+  <input type="range" id="slider-input" min="0" max="100" value="0" oninput="updateSliderDisplay()">
+  <div class="slider-actions">
+    <button class="btn-cancel" onclick="closeSlider()">取消</button>
+    <button class="btn-save" onclick="saveSlider()">儲存</button>
+  </div>
+</div>
+
+<!-- ═══ RECORD POPUP ═══ -->
+<div class="record-popup" id="record-popup" onclick="if(event.target===this)closeRecord()">
+  <div class="record-sheet">
+    <div class="record-title">
+      記一筆帳
+      <button class="close-btn" onclick="closeRecord()">×</button>
+    </div>
+    <div class="record-field">
+      <label>類型</label>
+      <select id="rec-type">
+        <option>支出</option>
+        <option>收入</option>
+      </select>
+    </div>
+    <div class="record-field">
+      <label>金額（TWD）</label>
+      <input type="number" id="rec-amount" placeholder="0">
+    </div>
+    <div class="record-field">
+      <label>分類</label>
+      <select id="rec-cat">
+        <option>🍜 餐飲</option>
+        <option>🚌 交通</option>
+        <option>📚 教材書籍</option>
+        <option>🎮 娛樂</option>
+        <option>📱 手機網路</option>
+        <option>🛒 其他</option>
+      </select>
+    </div>
+    <div class="record-field">
+      <label>備註</label>
+      <input type="text" id="rec-note" placeholder="選填">
+    </div>
+    <button class="btn-save" style="width:100%;margin-top:4px" onclick="saveRecord()">儲存</button>
+  </div>
+</div>
+
+<script>
+// ── DATE ──
+const d = new Date();
+document.getElementById('today-str').innerHTML =
+  d.toLocaleDateString('zh-TW',{month:'long',day:'numeric'}) + '<br>' +
+  ['日','一','二','三','四','五','六'][d.getDay()] + '曜日';
+
+// ── N2 COUNTDOWN ──
+const n2 = new Date('2025-07-05');
+const diff = Math.ceil((n2 - new Date()) / 86400000);
+document.getElementById('n2-days').textContent = diff > 0 ? diff : '已考';
+
+// ── TAB SWITCHING ──
+function switchTab(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── TODO ──
+function toggleTodo(el) {
+  el.classList.toggle('done');
+  const box = el.querySelector('.todo-check');
+  box.textContent = el.classList.contains('done') ? '✓' : '';
+  updateTodoCount();
+}
+
+function updateTodoCount() {
+  const all = document.querySelectorAll('.todo-item').length;
+  const done = document.querySelectorAll('.todo-item.done').length;
+  document.getElementById('todo-count').textContent = done + '/' + all + ' 完成';
+}
+
+function addTodo() {
+  const input = document.getElementById('new-todo-input');
+  const val = input.value.trim();
+  if (!val) return;
+  const list = document.getElementById('todo-list');
+  const item = document.createElement('div');
+  item.className = 'todo-item';
+  item.setAttribute('onclick', 'toggleTodo(this)');
+  item.innerHTML = `<div class="todo-check"></div><div class="todo-text">${val}</div><div class="todo-tag">自訂</div>`;
+  list.appendChild(item);
+  input.value = '';
+  updateTodoCount();
+}
+
+updateTodoCount();
+
+// ── HABITS ──
+const habits = [
+  { name: '🏃 運動', color: '#4a7c6f', done: [1,0,1,1,0,1,0] },
+  { name: '📖 閱讀', color: '#5b7fa6', done: [1,1,1,0,1,1,1] },
+  { name: '🎌 日語', color: '#6b5c4e', done: [1,1,1,1,1,0,1] },
+  { name: '💻 Coding', color: '#9b6b9b', done: [0,1,1,0,1,0,0] },
+  { name: '💤 早睡', color: '#c4773a', done: [0,0,1,0,1,0,0] },
+];
+
+const habitGrid = document.getElementById('habit-grid');
+
+habits.forEach(h => {
+  const row = document.createElement('div');
+  row.className = 'habit-row';
+  const nameEl = document.createElement('div');
+  nameEl.className = 'habit-name';
+  nameEl.textContent = h.name;
+  row.appendChild(nameEl);
+  h.done.forEach((v, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'hday' + (v ? ' done' : '');
+    cell.style.background = v ? h.color : '';
+    cell.textContent = v ? '✓' : '';
+    cell.onclick = () => {
+      cell.classList.toggle('done');
+      const on = cell.classList.contains('done');
+      cell.style.background = on ? h.color : '';
+      cell.textContent = on ? '✓' : '';
+      updateHabitRate();
+    };
+    row.appendChild(cell);
+  });
+  habitGrid.appendChild(row);
+});
+
+function updateHabitRate() {
+  const all = document.querySelectorAll('.hday').length;
+  const done = document.querySelectorAll('.hday.done').length;
+  const pct = Math.round(done / all * 100);
+  document.getElementById('habit-rate').textContent = pct + '% 達成';
+  document.getElementById('habit-pct-text').textContent = pct + '%';
+}
+
+updateHabitRate();
+
+// ── SLIDER (N2 Progress) ──
+let currentSliderKey = null;
+const sliderMap = {
+  vocab:   { bar: 'bar-vocab',   pct: 'pct-vocab',   label: '單字進度' },
+  grammar: { bar: 'bar-grammar', pct: 'pct-grammar',  label: '語法進度' },
+  listen:  { bar: 'bar-listen',  pct: 'pct-listen',   label: '聽力進度' },
+  read:    { bar: 'bar-read',    pct: 'pct-read',     label: '讀解進度' },
+};
+
+// Show one slider at a time cycling through all 4
+let sliderQueue = [];
+let sliderIdx = 0;
+
+function openSlider(mode) {
+  sliderQueue = ['vocab','grammar','listen','read'];
+  sliderIdx = 0;
+  loadSlider(sliderQueue[0]);
+  document.getElementById('slider-popup').classList.add('show');
+}
+
+function loadSlider(key) {
+  currentSliderKey = key;
+  const map = sliderMap[key];
+  const currentPct = parseInt(document.getElementById(map.pct).textContent);
+  document.getElementById('slider-title').textContent = '調整：' + map.label;
+  document.getElementById('slider-input').value = currentPct;
+  document.getElementById('slider-display').textContent = currentPct;
+}
+
+function updateSliderDisplay() {
+  document.getElementById('slider-display').textContent = document.getElementById('slider-input').value;
+}
+
+function saveSlider() {
+  if (!currentSliderKey) return;
+  const val = document.getElementById('slider-input').value;
+  const map = sliderMap[currentSliderKey];
+  document.getElementById(map.bar).style.width = val + '%';
+  document.getElementById(map.pct).textContent = val + '%';
+
+  sliderIdx++;
+  if (sliderIdx < sliderQueue.length) {
+    loadSlider(sliderQueue[sliderIdx]);
+  } else {
+    closeSlider();
+  }
+}
+
+function closeSlider() {
+  document.getElementById('slider-popup').classList.remove('show');
+}
+
+// ── RECORD ──
+function openRecord() {
+  document.getElementById('record-popup').classList.add('show');
+}
+
+function closeRecord() {
+  document.getElementById('record-popup').classList.remove('show');
+}
+
+function saveRecord() {
+  const amount = document.getElementById('rec-amount').value;
+  const cat = document.getElementById('rec-cat').value;
+  const type = document.getElementById('rec-type').value;
+  if (!amount) { closeRecord(); return; }
+
+  // Add to finance list visually
+  const card = document.querySelector('#page-finance .card:last-child');
+  const item = document.createElement('div');
+  item.className = 'finance-item';
+  const sign = type === '支出' ? '−' : '+';
+  const cls = type === '支出' ? 'exp' : 'inc';
+  item.innerHTML = `<span class="finance-cat">${cat}</span><span class="finance-amount ${cls}">${sign}${parseInt(amount).toLocaleString()}</span>`;
+  const divider = card.querySelector('.divider');
+  if (type === '支出') card.appendChild(item);
+  else card.insertBefore(item, divider);
+
+  closeRecord();
+}
+
+// ── SAVINGS EDIT ──
+function updateSavings() {
+  const now = parseInt(document.getElementById('savings-now').textContent.replace(/,/g,'')) || 0;
+  const goal = parseInt(document.getElementById('savings-goal').textContent.replace(/,/g,'')) || 100000;
+  const pct = Math.min(100, Math.round(now / goal * 100));
+  // Update ring
+  const circle = document.querySelector('.ring-container circle:last-child');
+  const circumference = 2 * Math.PI * 32;
+  const offset = circumference * (1 - pct / 100);
+  circle.setAttribute('stroke-dashoffset', offset.toFixed(2));
+  document.querySelector('.ring-pct').textContent = pct + '%';
+}
+</script>
+</body>
+</html>
