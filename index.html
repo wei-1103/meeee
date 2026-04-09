@@ -6,1406 +6,1276 @@
 <title>StudentOS</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f0eeeb;
-  --bg2: #e8e6e2;
-  --surface: #faf9f7;
-  --surface2: #f4f2ef;
-  --border: #dedad5;
-  --border2: #ccc9c3;
-  --text: #1a1816;
-  --text2: #5a5550;
-  --text3: #9a948e;
-  --accent: #6b5c4e;
-  --accent2: #4a7c6f;
-  --accent3: #c4773a;
-  --accent4: #b85c5c;
-  --accent5: #5b7fa6;
-  --tab-h: 68px;
-  --radius: 14px;
-  --radius-sm: 8px;
+:root{
+  --bg:#eeecea;--bg2:#e4e2de;--surface:#faf9f7;--surface2:#f2f0ed;
+  --border:#dedad4;--border2:#c8c4bc;
+  --text:#1c1a18;--text2:#56524c;--text3:#96908a;
+  --accent:#6b5c4e;--accent2:#4a7c6f;--accent3:#c4773a;
+  --accent4:#b05050;--accent5:#4f6fa0;--accent6:#7a5f9a;
+  --tab-h:64px;--r:14px;--rs:8px;
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* ── TOPBAR ── */
+.topbar{padding:48px 18px 14px;background:var(--bg);position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border)}
+.tb-title{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;letter-spacing:-0.01em}
+.tb-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.tb-right{text-align:right;font-size:11px;color:var(--text3);line-height:1.7}
 
-body {
-  font-family: 'Noto Sans TC', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  max-width: 430px;
-  margin: 0 auto;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
+/* ── SCROLL ── */
+.scroll-area{padding:14px 16px calc(var(--tab-h)+28px)}
 
-/* ── SCROLL AREA ── */
-.scroll-area {
-  padding: 0 16px calc(var(--tab-h) + 24px);
-  min-height: 100vh;
-}
-
-/* ── TOP BAR ── */
-.topbar {
-  padding: 52px 16px 16px;
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.topbar-title {
-  font-family: 'Shippori Mincho', serif;
-  font-weight: 700;
-  font-size: 22px;
-  color: var(--text);
-  letter-spacing: -0.01em;
-}
-
-.topbar-sub {
-  font-size: 12px;
-  color: var(--text3);
-  margin-top: 2px;
-}
-
-.topbar-date {
-  font-size: 12px;
-  color: var(--text3);
-  text-align: right;
-  line-height: 1.6;
-}
-
-/* ── TAB BAR ── */
-.tabbar {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  height: var(--tab-h);
-  background: rgba(250,249,247,0.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: flex;
-  z-index: 200;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.tab-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding-top: 8px;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.tab-icon {
-  font-size: 22px;
-  line-height: 1;
-  transition: transform 0.2s;
-}
-
-.tab-label {
-  font-size: 10px;
-  color: var(--text3);
-  font-weight: 400;
-  transition: color 0.2s;
-}
-
-.tab-item.active .tab-icon { transform: scale(1.1); }
-.tab-item.active .tab-label { color: var(--accent); font-weight: 500; }
+/* ── TABBAR ── */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--tab-h);background:rgba(250,249,247,0.96);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding-top:6px;-webkit-user-select:none;user-select:none}
+.tab-ic{font-size:21px;line-height:1;transition:transform .18s}
+.tab-lb{font-size:10px;color:var(--text3);transition:color .18s}
+.tab.active .tab-ic{transform:scale(1.12)}
+.tab.active .tab-lb{color:var(--accent);font-weight:500}
 
 /* ── PAGE ── */
-.page { display: none; }
-.page.active { display: block; }
-
-/* ── SECTION ── */
-.section-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 13px;
-  color: var(--text3);
-  letter-spacing: 0.08em;
-  margin: 24px 0 10px;
-}
+.page{display:none}.page.active{display:block}
 
 /* ── CARD ── */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 12px;
-}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card-hd{font-family:'Shippori Mincho',serif;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-hd-sub{font-size:11px;color:var(--text3);font-family:'Noto Sans TC',sans-serif;font-weight:400}
 
-.card-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+/* ── TILES ── */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.tile-lb{font-size:11px;color:var(--text3);margin-bottom:5px}
+.tile-val{font-family:'Shippori Mincho',serif;font-size:28px;font-weight:700;line-height:1;margin-bottom:3px}
+.tile-note{font-size:11px;color:var(--text3)}
 
-/* ── STAT ROW ── */
-.stat-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.stat-tile {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-}
-
-.stat-label {
-  font-size: 11px;
-  color: var(--text3);
-  margin-bottom: 6px;
-}
-
-.stat-val {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.stat-note { font-size: 11px; color: var(--text3); }
-
-/* ── COUNTDOWN BOX ── */
-.countdown-card {
-  background: var(--accent);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.countdown-left .cd-label {
-  font-size: 12px;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 6px;
-  font-family: 'Noto Sans TC';
-}
-
-.countdown-left .cd-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.countdown-left .cd-date {
-  font-size: 11px;
-  color: rgba(255,255,255,0.5);
-  margin-top: 4px;
-}
-
-.cd-days {
-  text-align: right;
-}
-
-.cd-days .num {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 52px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-}
-
-.cd-days .unit {
-  font-size: 13px;
-  color: rgba(255,255,255,0.65);
-}
+/* ── COUNTDOWN ── */
+.cd-card{background:var(--accent);border-radius:var(--r);padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.cd-lbl{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:5px}
+.cd-title{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:700;color:#fff}
+.cd-date{font-size:11px;color:rgba(255,255,255,.45);margin-top:3px}
+.cd-num{font-family:'Shippori Mincho',serif;font-size:50px;font-weight:800;color:#fff;line-height:1}
+.cd-unit{font-size:12px;color:rgba(255,255,255,.55);text-align:right}
 
 /* ── PROGRESS ── */
-.prog-wrap { margin-bottom: 12px; }
-.prog-wrap:last-child { margin-bottom: 0; }
+.prog{margin-bottom:11px}.prog:last-child{margin-bottom:0}
+.prog-hd{display:flex;justify-content:space-between;margin-bottom:5px}
+.prog-lb{font-size:13px;color:var(--text2)}
+.prog-pc{font-size:12px;color:var(--text3)}
+.prog-tr{height:5px;background:var(--bg2);border-radius:99px;overflow:hidden}
+.prog-fl{height:100%;border-radius:99px;transition:width .5s ease}
 
-.prog-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
+/* ── BADGES ── */
+.badge{font-size:10px;padding:3px 8px;border-radius:4px;display:inline-block;white-space:nowrap}
+.b-todo{background:var(--surface2);color:var(--text3)}
+.b-doing{background:rgba(196,119,58,.12);color:var(--accent3)}
+.b-done{background:rgba(74,124,111,.12);color:var(--accent2)}
+.b-urgent{background:rgba(176,80,80,.12);color:var(--accent4)}
 
-.prog-label { font-size: 13px; color: var(--text2); }
-.prog-pct { font-size: 12px; color: var(--text3); }
-
-.prog-track {
-  height: 5px;
-  background: var(--bg2);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.prog-fill {
-  height: 100%;
-  border-radius: 99px;
-  transition: width 0.6s ease;
-}
-
-/* Editable progress */
-.prog-fill[data-editable] { cursor: pointer; }
-
-/* ── EDITABLE VALUES ── */
-[contenteditable="true"] {
-  outline: none;
-  border-bottom: 1.5px solid var(--accent3);
-  padding-bottom: 1px;
-  min-width: 20px;
-  display: inline-block;
-}
-
-.edit-hint {
-  font-size: 10px;
-  color: var(--text3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-
-/* ── TODO LIST ── */
-.todo-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.todo-item:last-child { border-bottom: none; }
-
-.todo-check {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border2);
-  flex-shrink: 0;
-  margin-top: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  transition: all 0.2s;
-}
-
-.todo-item.done .todo-check {
-  background: var(--accent2);
-  border-color: var(--accent2);
-  color: #fff;
-}
-
-.todo-text {
-  flex: 1;
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.5;
-  transition: all 0.2s;
-}
-
-.todo-item.done .todo-text {
-  text-decoration: line-through;
-  color: var(--text3);
-}
-
-.todo-tag {
-  font-size: 10px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  flex-shrink: 0;
-  margin-top: 2px;
-  background: var(--surface2);
-  color: var(--text3);
-}
-
-.todo-add {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0 0;
-  margin-top: 2px;
-}
-
-.todo-add input {
-  flex: 1;
-  background: none;
-  border: none;
-  border-bottom: 1.5px solid var(--border2);
-  padding: 4px 0;
-  font-size: 14px;
-  color: var(--text);
-  font-family: 'Noto Sans TC', sans-serif;
-  outline: none;
-}
-
-.todo-add input::placeholder { color: var(--text3); font-size: 13px; }
-
-.todo-add button {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'Noto Sans TC', sans-serif;
-}
-
-/* ── HABIT GRID ── */
-.habit-days-header {
-  display: grid;
-  grid-template-columns: 100px repeat(7, 1fr);
-  gap: 4px;
-  margin-bottom: 6px;
-}
-
-.hd-label {
-  text-align: center;
-  font-size: 10px;
-  color: var(--text3);
-}
-
-.habit-row {
-  display: grid;
-  grid-template-columns: 100px repeat(7, 1fr);
-  gap: 4px;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.habit-name { font-size: 12px; color: var(--text2); }
-
-.hday {
-  aspect-ratio: 1;
-  border-radius: 5px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  color: transparent;
-  transition: all 0.15s;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.hday.done { color: rgba(0,0,0,0.35); border-color: transparent; }
-.hday:active { transform: scale(0.88); }
-
-/* ── COURSE TABLE ── */
-.course-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.course-item:last-child { border-bottom: none; }
-
-.course-name {
-  font-size: 14px;
-  color: var(--text2);
-  flex: 1;
-}
-
-.course-credit {
-  font-size: 12px;
-  color: var(--text3);
-  margin-right: 10px;
-}
-
-.course-badge {
-  font-size: 10px;
-  padding: 2px 7px;
-  border-radius: 4px;
-}
-
-/* ── FINANCE ── */
-.finance-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.finance-item:last-child { border-bottom: none; }
-.finance-cat { font-size: 14px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
-.finance-amount { font-size: 14px; font-weight: 500; }
-.finance-amount.inc { color: var(--accent2); }
-.finance-amount.exp { color: var(--accent4); }
-
-/* ── INLINE EDITOR ── */
-.inline-edit {
-  background: none;
-  border: none;
-  border-bottom: 1.5px solid var(--accent3);
-  padding: 1px 2px;
-  font-size: inherit;
-  font-family: inherit;
-  color: inherit;
-  width: 60px;
-  outline: none;
-  text-align: right;
-}
-
-/* ── STATUS ── */
-.status {
-  font-size: 10px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.s-todo { background: var(--surface2); color: var(--text3); }
-.s-doing { background: rgba(196,119,58,0.12); color: var(--accent3); }
-.s-done { background: rgba(74,124,111,0.12); color: var(--accent2); }
-
-/* ── MORE PAGE ── */
-.more-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-}
-
-.more-item:last-child { border-bottom: none; }
-.more-left { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text2); }
-.more-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center; font-size: 18px;
-  background: var(--surface2);
-}
-.more-arrow { color: var(--text3); font-size: 16px; }
-
-/* ── SAVINGS RING ── */
-.savings-wrap {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 4px 0;
-}
-
-.ring-container { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
-.ring-container svg { width: 80px; height: 80px; transform: rotate(-90deg); }
-.ring-center {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-.ring-pct {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1;
-}
-.ring-sub { font-size: 9px; color: var(--text3); }
-
-.savings-detail { flex: 1; }
-.savings-label { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
-.savings-val {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-.savings-target { font-size: 12px; color: var(--text3); }
-
-/* ── ANIM ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.page.active > * {
-  animation: fadeUp 0.3s ease both;
-}
-
-.page.active > *:nth-child(2) { animation-delay: 0.04s; }
-.page.active > *:nth-child(3) { animation-delay: 0.08s; }
-.page.active > *:nth-child(4) { animation-delay: 0.12s; }
-.page.active > *:nth-child(5) { animation-delay: 0.16s; }
+/* ── EDIT BTN ── */
+.edit-btn{font-size:11px;color:var(--accent3);cursor:pointer;padding:3px 8px;border:1px solid rgba(196,119,58,.3);border-radius:5px;background:rgba(196,119,58,.06);white-space:nowrap;-webkit-user-select:none;user-select:none}
+.edit-btn:active{background:rgba(196,119,58,.15)}
 
 /* ── DIVIDER ── */
-.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.div{height:1px;background:var(--border);margin:12px 0}
 
-/* ── PROGRESS SLIDER POPUP ── */
-.slider-popup {
-  position: fixed;
-  bottom: calc(var(--tab-h) + 16px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 20px;
-  width: calc(100% - 32px);
-  max-width: 398px;
-  z-index: 300;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  display: none;
-}
+/* ── HINT ── */
+.hint{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 
-.slider-popup.show { display: block; animation: fadeUp 0.2s ease; }
-.slider-title { font-family: 'Shippori Mincho', serif; font-size: 14px; margin-bottom: 12px; }
+/* ── TODOS ── */
+.todo-item{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none}
+.todo-item:last-child{border-bottom:none}
+.todo-chk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .18s}
+.todo-item.done .todo-chk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.todo-item.done .todo-txt{text-decoration:line-through;color:var(--text3)}
+.todo-txt{flex:1;font-size:14px;color:var(--text2);line-height:1.5}
+.todo-tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--text3);flex-shrink:0;margin-top:2px}
+.todo-del{font-size:16px;color:var(--text3);padding:0 4px;cursor:pointer;flex-shrink:0;line-height:1.5}
 
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 5px;
-  background: var(--bg2);
-  border-radius: 99px;
-  outline: none;
-  margin: 8px 0;
-}
+/* ── ADD ROW ── */
+.add-row{display:flex;align-items:center;gap:8px;padding-top:10px;margin-top:4px}
+.add-inp{flex:1;background:none;border:none;border-bottom:1.5px solid var(--border2);padding:4px 0;font-size:14px;color:var(--text);font-family:'Noto Sans TC',sans-serif;outline:none}
+.add-inp::placeholder{color:var(--text3);font-size:13px}
+.add-sel{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;color:var(--text2);font-family:'Noto Sans TC',sans-serif;outline:none;-webkit-appearance:none}
+.add-btn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;white-space:nowrap}
 
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-  border: 3px solid #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
+/* ── COURSES ── */
+.cr-item{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cr-item:last-child{border-bottom:none}
+.cr-name{flex:1;font-size:13px;color:var(--text2)}
 
-.slider-val {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
-  color: var(--accent);
-  margin-bottom: 8px;
-}
+/* ── FINANCE ── */
+.fin-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.fin-item:last-child{border-bottom:none}
+.fin-cat{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px;flex:1}
+.fin-amt{font-size:14px;font-weight:500}
+.fin-inc{color:var(--accent2)}.fin-exp{color:var(--accent4)}
+.num-inp{background:none;border:none;border-bottom:1.5px solid var(--accent3);width:64px;text-align:right;font-size:13px;font-family:'Noto Sans TC',sans-serif;color:var(--text);outline:none;padding:1px 0}
 
-.slider-actions { display: flex; gap: 8px; margin-top: 12px; }
-.btn-save {
-  flex: 1; background: var(--accent); color: #fff;
-  border: none; border-radius: 8px; padding: 10px;
-  font-size: 14px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
-}
-.btn-cancel {
-  background: var(--surface2); color: var(--text2);
-  border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px;
-  font-size: 14px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
-}
+/* ── SAVINGS RING ── */
+.sav-wrap{display:flex;align-items:center;gap:18px;padding:4px 0}
+.ring-box{position:relative;width:88px;height:88px;flex-shrink:0}
+.ring-box svg{width:88px;height:88px;transform:rotate(-90deg)}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-pct{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:700;color:var(--text)}
+.ring-sub{font-size:9px;color:var(--text3)}
+.sav-detail .sav-lb{font-size:11px;color:var(--text3);margin-bottom:3px}
+.sav-val{font-family:'Shippori Mincho',serif;font-size:26px;font-weight:700;color:var(--text)}
+.sav-tgt{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* ── RECORD POPUP ── */
-.record-popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 400;
-  display: none;
-  align-items: flex-end;
-}
+/* ── COLLAPSIBLE SECTION ── */
+.coll-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;-webkit-user-select:none;user-select:none;border-bottom:1px solid var(--border)}
+.coll-hd:last-child{border-bottom:none}
+.coll-left{display:flex;align-items:center;gap:12px}
+.coll-ic{width:36px;height:36px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.coll-name{font-size:14px;color:var(--text);font-weight:500}
+.coll-desc{font-size:11px;color:var(--text3);margin-top:1px}
+.coll-right{display:flex;align-items:center;gap:8px}
+.coll-arr{color:var(--text3);font-size:16px;transition:transform .2s}
+.coll-arr.open{transform:rotate(90deg)}
+.coll-body{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.coll-body.open{max-height:2000px}
+.coll-inner{padding:12px 0 4px}
 
-.record-popup.show { display: flex; }
+/* ── GOALS INLINE ── */
+.goals-inline .todo-item{padding:8px 0}
 
-.record-sheet {
-  background: var(--surface);
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: 20px 20px 36px;
-  width: 100%;
-  animation: slideUp 0.25s ease;
-}
+/* ── STOCKS (enhanced) ── */
+.stock-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.stock-card:last-child{margin-bottom:0}
+.stock-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.stock-code{font-family:'Shippori Mincho',serif;font-size:15px;font-weight:700;color:var(--accent5)}
+.stock-name{font-size:13px;color:var(--text2);margin-top:1px}
+.stock-price-tag{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600}
+.stock-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.stock-field-lb{font-size:10px;color:var(--text3);margin-bottom:3px}
+.stock-field-val{font-size:12px;color:var(--text2)}
+.stock-reason{font-size:12px;color:var(--text2);line-height:1.6;padding:8px 10px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
+.stock-del{font-size:12px;color:var(--text3);cursor:pointer;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:var(--surface)}
 
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
+/* ── EXCHANGE CHECKLIST ── */
+.exch-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none}
+.exch-item:last-child{border-bottom:none}
+.exch-chk{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .18s}
+.exch-item.done .exch-chk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.exch-item.done .exch-txt{text-decoration:line-through;color:var(--text3)}
+.exch-txt{flex:1;font-size:13px;color:var(--text2)}
 
-.record-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+/* ── CERT ITEMS ── */
+.cert-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cert-item:last-child{border-bottom:none}
+.cert-name{flex:1;font-size:13px;color:var(--text2)}
 
-.close-btn { font-size: 20px; color: var(--text3); cursor: pointer; background: none; border: none; }
+/* ── TIMETABLE ── */
+.tt-grid{display:grid;grid-template-columns:40px repeat(5,1fr);gap:3px;margin-top:4px}
+.tt-hd{text-align:center;font-size:10px;color:var(--text3);padding:4px 0}
+.tt-time{font-size:9px;color:var(--text3);display:flex;align-items:center;justify-content:flex-end;padding-right:4px;line-height:1.2}
+.tt-cell{border-radius:5px;min-height:38px;padding:4px 5px;font-size:9px;line-height:1.4;cursor:pointer;border:1px dashed var(--border);background:transparent;color:var(--text3);display:flex;align-items:center;justify-content:center;text-align:center;transition:all .15s}
+.tt-cell.filled{border-style:solid;color:#fff;font-weight:500}
+.tt-cell.filled:active{opacity:.8}
 
-.record-field {
-  margin-bottom: 14px;
-}
+/* ── NOTES ── */
+.note-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.note-card:last-child{margin-bottom:0}
+.note-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.note-title{font-size:14px;font-weight:500;color:var(--text)}
+.note-tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface);color:var(--text3);border:1px solid var(--border)}
+.note-body{font-size:12px;color:var(--text3);line-height:1.7}
+.note-date{font-size:10px;color:var(--border2);margin-top:8px}
 
-.record-field label {
-  font-size: 12px;
-  color: var(--text3);
-  display: block;
-  margin-bottom: 6px;
-}
+/* ── PORTFOLIO ── */
+.proj-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.proj-card:last-child{margin-bottom:0}
+.proj-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.proj-desc{font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:8px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:4px}
+.proj-tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
 
-.record-field input, .record-field select {
-  width: 100%;
-  padding: 10px 12px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  color: var(--text);
-  font-family: 'Noto Sans TC', sans-serif;
-  outline: none;
-  -webkit-appearance: none;
-}
+/* ── SHEET / OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:500;display:none;align-items:flex-end}
+.overlay.show{display:flex;animation:fadeIn .15s ease}
+.sheet{background:var(--surface);border-radius:var(--r) var(--r) 0 0;padding:20px 18px 40px;width:100%;animation:slideUp .22s ease;max-height:88vh;overflow-y:auto}
+.sheet-title{font-family:'Shippori Mincho',serif;font-size:16px;font-weight:600;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.close-x{font-size:22px;color:var(--text3);cursor:pointer;background:none;border:none;line-height:1}
+.field{margin-bottom:14px}
+.field label{font-size:11px;color:var(--text3);display:block;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);font-size:14px;color:var(--text);font-family:'Noto Sans TC',sans-serif;outline:none;-webkit-appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent3)}
+.field textarea{resize:none;height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-main{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:12px;font-size:15px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-top:4px}
 
-.record-field input:focus, .record-field select:focus {
-  border-color: var(--accent3);
-}
+/* ── SLIDER ── */
+.sl-popup{position:fixed;bottom:calc(var(--tab-h)+14px);left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,.1);display:none}
+.sl-popup.show{display:block;animation:fadeUp .2s ease}
+.sl-title{font-family:'Shippori Mincho',serif;font-size:14px;margin-bottom:4px}
+.sl-sub{font-size:11px;color:var(--text3);margin-bottom:12px}
+.sl-val{font-family:'Shippori Mincho',serif;font-size:32px;font-weight:700;text-align:center;color:var(--accent);margin-bottom:6px}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;background:var(--bg2);border-radius:99px;outline:none;margin:8px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.sl-acts{display:flex;gap:8px;margin-top:12px}
+.sl-save{flex:1;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:10px;font-size:14px;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+.sl-cancel{background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;font-size:14px;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page.active>*{animation:fadeUp .28s ease both}
+.page.active>*:nth-child(2){animation-delay:.05s}
+.page.active>*:nth-child(3){animation-delay:.1s}
+.page.active>*:nth-child(4){animation-delay:.14s}
+.page.active>*:nth-child(5){animation-delay:.18s}
+.page.active>*:nth-child(6){animation-delay:.22s}
 </style>
 </head>
 <body>
 
-<!-- PAGES WRAPPER -->
-<div id="app">
-
-<!-- ═══ PAGE: HOME ═══ -->
+<!-- ════════════ HOME ════════════ -->
 <div class="page active" id="page-home">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">今日</div>
-      <div class="topbar-sub">大三下學期・資工系</div>
-    </div>
-    <div class="topbar-date" id="today-str"></div>
+    <div><div class="tb-title">今日</div><div class="tb-sub">大二下・資工系</div></div>
+    <div class="tb-right" id="home-date"></div>
   </div>
   <div class="scroll-area">
-
-    <!-- Countdown -->
-    <div class="countdown-card">
-      <div class="countdown-left">
-        <div class="cd-label">考試倒數</div>
+    <div class="cd-card">
+      <div>
+        <div class="cd-lbl">考試倒數</div>
         <div class="cd-title">🎌 JLPT N2</div>
-        <div class="cd-date">2025年7月5日</div>
+        <div class="cd-date">2026年7月5日</div>
       </div>
-      <div class="cd-days">
-        <div class="num" id="n2-days">--</div>
-        <div class="unit">天</div>
-      </div>
-    </div>
-
-    <!-- Quick stats -->
-    <div class="stat-row">
-      <div class="stat-tile">
-        <div class="stat-label">已修學分</div>
-        <div class="stat-val" style="color:var(--accent5)">87</div>
-        <div class="stat-note">/ 128 目標</div>
-      </div>
-      <div class="stat-tile">
-        <div class="stat-label">本月結餘</div>
-        <div class="stat-val" style="color:var(--accent2)">2,340</div>
-        <div class="stat-note">TWD ↑</div>
+      <div style="text-align:right">
+        <div class="cd-num" id="n2-days">--</div>
+        <div class="cd-unit">天</div>
       </div>
     </div>
-
-    <!-- Today's todo -->
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile-lb">已修學分</div>
+        <div class="tile-val" id="home-credits" style="color:var(--accent5)">--</div>
+        <div class="tile-note">/ <span id="home-total">128</span> 目標</div>
+      </div>
+      <div class="tile">
+        <div class="tile-lb">本月結餘</div>
+        <div class="tile-val" id="home-balance" style="color:var(--accent2)">--</div>
+        <div class="tile-note">TWD</div>
+      </div>
+    </div>
     <div class="card">
-      <div class="card-title">
+      <div class="card-hd">
         今日待辦
-        <span style="font-size:12px;color:var(--text3);font-family:'Noto Sans TC'" id="todo-count"></span>
-      </div>
-      <div id="todo-list">
-        <div class="todo-item" onclick="toggleTodo(this)">
-          <div class="todo-check"></div>
-          <div class="todo-text">N2 模擬測驗 第14回</div>
-          <div class="todo-tag" style="background:rgba(107,92,78,0.1);color:var(--accent)">日語</div>
-        </div>
-        <div class="todo-item" onclick="toggleTodo(this)">
-          <div class="todo-check"></div>
-          <div class="todo-text">作業系統 Ch.8 複習</div>
-          <div class="todo-tag" style="background:rgba(91,127,166,0.1);color:var(--accent5)">課業</div>
-        </div>
-        <div class="todo-item done" onclick="toggleTodo(this)">
-          <div class="todo-check">✓</div>
-          <div class="todo-text">更新 GitHub README</div>
-          <div class="todo-tag">專案</div>
-        </div>
-        <div class="todo-item" onclick="toggleTodo(this)">
-          <div class="todo-check"></div>
-          <div class="todo-text">記帳：今日支出</div>
-          <div class="todo-tag" style="background:rgba(74,124,111,0.1);color:var(--accent2)">理財</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="card-hd-sub" id="home-todo-count"></span>
+          <span class="edit-btn" onclick="openSheet('add-todo')">＋ 新增</span>
         </div>
       </div>
-      <div class="todo-add">
-        <input type="text" id="new-todo-input" placeholder="新增待辦…" onkeydown="if(event.key==='Enter')addTodo()">
-        <button onclick="addTodo()">＋ 新增</button>
-      </div>
+      <div id="home-todo-list"></div>
+      <div class="hint">✎ 點圓圈打勾完成・點 × 刪除</div>
     </div>
-
-    <!-- N2 Progress quick view -->
     <div class="card">
-      <div class="card-title">
-        N2 備考進度
-        <span style="font-size:11px;color:var(--accent3);cursor:pointer" onclick="openSlider('n2-all')">編輯</span>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header">
-          <span class="prog-label">📖 單字</span>
-          <span class="prog-pct" id="pct-vocab">68%</span>
-        </div>
-        <div class="prog-track"><div class="prog-fill" id="bar-vocab" style="width:68%;background:var(--accent)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header">
-          <span class="prog-label">✏️ 語法</span>
-          <span class="prog-pct" id="pct-grammar">52%</span>
-        </div>
-        <div class="prog-track"><div class="prog-fill" id="bar-grammar" style="width:52%;background:var(--accent5)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header">
-          <span class="prog-label">🎧 聽力</span>
-          <span class="prog-pct" id="pct-listen">40%</span>
-        </div>
-        <div class="prog-track"><div class="prog-fill" id="bar-listen" style="width:40%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header">
-          <span class="prog-label">📝 讀解</span>
-          <span class="prog-pct" id="pct-read">35%</span>
-        </div>
-        <div class="prog-track"><div class="prog-fill" id="bar-read" style="width:35%;background:var(--accent3)"></div></div>
-      </div>
-      <div class="edit-hint">✎ 點「編輯」可滑動調整各科進度</div>
+      <div class="card-hd">N2 備考進度 <span class="edit-btn" onclick="openSlider(0)">編輯</span></div>
+      <div id="n2-progs"></div>
+      <div class="hint">✎ 點「編輯」依序滑動調整各科</div>
     </div>
-
   </div>
 </div>
 
-<!-- ═══ PAGE: HABITS ═══ -->
-<div class="page" id="page-habits">
+<!-- ════════════ TODOS ════════════ -->
+<div class="page" id="page-todos">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">習慣追蹤</div>
-      <div class="topbar-sub">本週打卡・點格子切換</div>
-    </div>
+    <div><div class="tb-title">待辦事項</div><div class="tb-sub">全部任務・分類管理</div></div>
+    <span class="edit-btn" onclick="openSheet('add-todo')">＋ 新增</span>
   </div>
   <div class="scroll-area">
-
-    <div class="card">
-      <div class="card-title">
-        本週習慣
-        <span style="font-size:12px;color:var(--text3)" id="habit-rate"></span>
-      </div>
-      <div class="habit-days-header">
-        <div></div>
-        <div class="hd-label">一</div>
-        <div class="hd-label">二</div>
-        <div class="hd-label">三</div>
-        <div class="hd-label">四</div>
-        <div class="hd-label">五</div>
-        <div class="hd-label">六</div>
-        <div class="hd-label">日</div>
-      </div>
-      <div id="habit-grid"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">本月統計</div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">🏃 運動</span><span class="prog-pct">18/30天</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:60%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">📖 閱讀30分</span><span class="prog-pct">22/30天</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:73%;background:var(--accent5)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">🎌 日語練習</span><span class="prog-pct">25/30天</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:83%;background:var(--accent)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">💻 Coding 1hr</span><span class="prog-pct">15/30天</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:50%;background:var(--accent3)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">💤 23點就寢</span><span class="prog-pct">12/30天</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:40%;background:var(--accent4)"></div></div>
-      </div>
-    </div>
-
-    <div class="card" style="background:rgba(74,124,111,0.08);border-color:rgba(74,124,111,0.2)">
-      <div style="font-size:13px;color:var(--accent2);line-height:2">
-        🏆 最佳連續：<strong>日語練習 11天</strong><br>
-        ⚠️ 最需加強：<strong style="color:var(--accent4)">早睡（40%）</strong><br>
-        📊 本週完成率：<strong id="habit-pct-text">計算中</strong>
-      </div>
-    </div>
-
+    <div id="todo-sections"></div>
   </div>
 </div>
 
-<!-- ═══ PAGE: COURSES ═══ -->
+<!-- ════════════ COURSES ════════════ -->
 <div class="page" id="page-courses">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">學分規劃</div>
-      <div class="topbar-sub">畢業學分檢核</div>
-    </div>
+    <div><div class="tb-title">學分規劃</div><div class="tb-sub">資工系・大二下</div></div>
+    <span class="edit-btn" onclick="openSheet('add-course')">＋ 課程</span>
   </div>
   <div class="scroll-area">
-
-    <div class="stat-row">
-      <div class="stat-tile">
-        <div class="stat-label">已修</div>
-        <div class="stat-val" style="color:var(--accent)">87</div>
-        <div class="stat-note">/ 128 學分</div>
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile-lb">已修學分</div>
+        <div class="tile-val" id="cr-earned" style="color:var(--accent5)">--</div>
+        <div class="tile-note">/ <span id="cr-total">128</span></div>
       </div>
-      <div class="stat-tile">
-        <div class="stat-label">GPA</div>
-        <div class="stat-val" style="color:var(--accent3)">3.68</div>
-        <div class="stat-note">累積</div>
+      <div class="tile">
+        <div class="tile-lb">GPA</div>
+        <div class="tile-val" id="cr-gpa" style="color:var(--accent3)">--</div>
+        <div class="tile-note">累積</div>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-title">畢業學分進度</div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">必修</span><span class="prog-pct">72/80</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:90%;background:var(--accent5)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">選修</span><span class="prog-pct">15/32</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:47%;background:var(--accent)"></div></div>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-header"><span class="prog-label">通識</span><span class="prog-pct">10/16</span></div>
-        <div class="prog-track"><div class="prog-fill" style="width:62%;background:var(--accent3)"></div></div>
-      </div>
-      <div style="margin-top:12px;font-size:13px;color:var(--text3)">尚需完成 <strong style="color:var(--accent4)">41</strong> 學分・預計大四修畢</div>
+      <div class="card-hd">畢業學分進度</div>
+      <div class="prog"><div class="prog-hd"><span class="prog-lb">必修</span><span class="prog-pc" id="lbl-req">--</span></div><div class="prog-tr"><div class="prog-fl" id="bar-req" style="background:var(--accent5)"></div></div></div>
+      <div class="prog"><div class="prog-hd"><span class="prog-lb">選修</span><span class="prog-pc" id="lbl-ele">--</span></div><div class="prog-tr"><div class="prog-fl" id="bar-ele" style="background:var(--accent)"></div></div></div>
+      <div class="prog"><div class="prog-hd"><span class="prog-lb">通識</span><span class="prog-pc" id="lbl-gen">--</span></div><div class="prog-tr"><div class="prog-fl" id="bar-gen" style="background:var(--accent3)"></div></div></div>
+      <div class="hint" id="cr-remain-hint"></div>
     </div>
-
     <div class="card">
-      <div class="card-title">113-2 本學期課程</div>
-      <div class="course-item">
-        <span class="course-name">資訊安全概論</span>
-        <span class="course-credit">3學分</span>
-        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">作業系統</span>
-        <span class="course-credit">3學分</span>
-        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">計算機網路</span>
-        <span class="course-credit">3學分</span>
-        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">演算法設計</span>
-        <span class="course-credit">3學分</span>
-        <span class="course-badge" style="background:rgba(91,127,166,0.12);color:var(--accent5)">必修</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">日語文法進階</span>
-        <span class="course-credit">2學分</span>
-        <span class="course-badge" style="background:rgba(196,119,58,0.12);color:var(--accent3)">通識</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">專題研究(一)</span>
-        <span class="course-credit">2學分</span>
-        <span class="course-badge" style="background:rgba(107,92,78,0.1);color:var(--accent)">選修</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">體育（羽球）</span>
-        <span class="course-credit">1學分</span>
-        <span class="course-badge" style="background:rgba(74,124,111,0.12);color:var(--accent2)">體育</span>
-      </div>
+      <div class="card-hd">本學期課程 <span class="card-hd-sub">113-2</span></div>
+      <div id="course-list"></div>
     </div>
-
     <div class="card">
-      <div class="card-title">資安證照路徑</div>
-      <div class="course-item">
-        <span class="course-name">CompTIA Security+</span>
-        <span class="status s-doing">備考中</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">CEH 道德駭客</span>
-        <span class="status s-todo">規劃中</span>
-      </div>
-      <div class="course-item">
-        <span class="course-name">OSCP</span>
-        <span class="status s-todo">長期目標</span>
-      </div>
+      <div class="card-hd">學分目標 <span class="edit-btn" onclick="openSheet('edit-credits')">編輯</span></div>
+      <div class="fin-item"><span class="fin-cat">🎯 畢業總學分</span><span id="disp-total">128</span></div>
+      <div class="fin-item"><span class="fin-cat">📘 必修需求</span><span id="disp-req">80</span></div>
+      <div class="fin-item"><span class="fin-cat">📗 選修需求</span><span id="disp-ele">32</span></div>
+      <div class="fin-item" style="border:none"><span class="fin-cat">📙 通識需求</span><span id="disp-gen">16</span></div>
     </div>
-
+    <div class="card">
+      <div class="card-hd">證照 &amp; 時數 <span class="edit-btn" onclick="openSheet('add-cert')">＋ 新增</span></div>
+      <div id="cert-list"></div>
+      <div class="div"></div>
+      <div class="fin-item"><span class="fin-cat">🕐 服務學習</span><span><span contenteditable="true" style="min-width:24px;display:inline-block;outline:none;border-bottom:1.5px solid var(--accent3)" id="service-h">18</span> / 需72h</span></div>
+      <div class="fin-item" style="border:none"><span class="fin-cat">🏫 實習時數</span><span><span contenteditable="true" style="min-width:24px;display:inline-block;outline:none;border-bottom:1.5px solid var(--accent3)" id="intern-h">0</span> h</span></div>
+      <div class="hint">✎ 點數字直接編輯時數</div>
+    </div>
   </div>
 </div>
 
-<!-- ═══ PAGE: FINANCE ═══ -->
+<!-- ════════════ FINANCE ════════════ -->
 <div class="page" id="page-finance">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">理財</div>
-      <div class="topbar-sub">收支管理・存款目標</div>
-    </div>
-    <button onclick="openRecord()" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif">＋ 記帳</button>
+    <div><div class="tb-title">理財</div><div class="tb-sub">收支管理・存款目標</div></div>
+    <span class="edit-btn" onclick="openSheet('add-finance')">＋ 記帳</span>
   </div>
   <div class="scroll-area">
-
-    <!-- Savings ring -->
     <div class="card">
-      <div class="card-title">交換學生基金</div>
-      <div class="savings-wrap">
-        <div class="ring-container">
-          <svg viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="32" fill="none" stroke="#e8e6e2" stroke-width="8"/>
-            <circle cx="40" cy="40" r="32" fill="none" stroke="#4a7c6f" stroke-width="8"
-              stroke-dasharray="201.06" stroke-dashoffset="103.55" stroke-linecap="round"/>
+      <div class="card-hd">交換學生基金 <span class="edit-btn" onclick="openSheet('edit-savings')">編輯</span></div>
+      <div class="sav-wrap">
+        <div class="ring-box">
+          <svg viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="36" fill="none" stroke="#e4e2de" stroke-width="9"/>
+            <circle id="ring-circle" cx="44" cy="44" r="36" fill="none" stroke="#4a7c6f" stroke-width="9" stroke-dasharray="226.2" stroke-dashoffset="226.2" stroke-linecap="round"/>
           </svg>
-          <div class="ring-center">
-            <div class="ring-pct">48%</div>
-            <div class="ring-sub">達成</div>
-          </div>
+          <div class="ring-center"><div class="ring-pct" id="ring-pct">0%</div><div class="ring-sub">達成</div></div>
         </div>
-        <div class="savings-detail">
-          <div class="savings-label">目前存款</div>
-          <div class="savings-val">
-            <span id="savings-now" contenteditable="true" onblur="updateSavings()">48,500</span>
-          </div>
-          <div class="savings-target">目標：<span id="savings-goal" contenteditable="true" onblur="updateSavings()">100,000</span> TWD</div>
-          <div style="font-size:11px;color:var(--accent4);margin-top:6px">還差 51,500 元 · 每月需存約 7,357</div>
+        <div class="sav-detail">
+          <div class="sav-lb">目前存款</div>
+          <div class="sav-val"><span id="sav-now">48,500</span> <span style="font-size:12px;color:var(--text3)">TWD</span></div>
+          <div class="sav-tgt">目標：<span id="sav-goal">100,000</span> TWD</div>
+          <div style="font-size:11px;color:var(--accent4);margin-top:6px" id="sav-remain"></div>
         </div>
       </div>
-      <div class="edit-hint">✎ 點金額可直接編輯</div>
     </div>
-
-    <!-- Month summary -->
     <div class="card">
-      <div class="card-title">
-        本月收支
-        <span style="font-size:13px;font-weight:700;color:var(--accent2)">+2,340</span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">🎓 獎學金</span>
-        <span class="finance-amount inc">+5,000</span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">👨‍👩‍👧 家庭生活費</span>
-        <span class="finance-amount inc">+8,000</span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">💻 接案收入</span>
-        <span class="finance-amount inc">+2,000</span>
-      </div>
-      <div class="divider"></div>
-      <div class="finance-item">
-        <span class="finance-cat">🍜 餐飲</span>
-        <span class="finance-amount exp">−<input class="inline-edit" value="4,200" onchange="recalc()"></span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">📚 教材書籍</span>
-        <span class="finance-amount exp">−<input class="inline-edit" value="1,800" onchange="recalc()"></span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">🚌 交通</span>
-        <span class="finance-amount exp">−<input class="inline-edit" value="980" onchange="recalc()"></span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">📱 手機網路</span>
-        <span class="finance-amount exp">−<input class="inline-edit" value="699" onchange="recalc()"></span>
-      </div>
-      <div class="finance-item">
-        <span class="finance-cat">🎮 娛樂</span>
-        <span class="finance-amount exp">−<input class="inline-edit" value="1,200" onchange="recalc()"></span>
+      <div class="card-hd">💚 收入 <span class="card-hd-sub" id="total-inc-lbl"></span></div>
+      <div id="income-list"></div>
+      <div class="add-row">
+        <input class="add-inp" id="inc-name" placeholder="收入項目…">
+        <input type="number" class="add-inp" id="inc-amt" placeholder="金額" style="width:80px;flex:none">
+        <button class="add-btn" onclick="addFinItem('income')">＋</button>
       </div>
     </div>
-
+    <div class="card">
+      <div class="card-hd">❤️ 支出 <span class="card-hd-sub" id="total-exp-lbl"></span></div>
+      <div id="expense-list"></div>
+      <div class="add-row">
+        <input class="add-inp" id="exp-name" placeholder="支出項目…">
+        <input type="number" class="add-inp" id="exp-amt" placeholder="金額" style="width:80px;flex:none">
+        <button class="add-btn" onclick="addFinItem('expense')">＋</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:14px;color:var(--text2)">本月結餘</span>
+        <span style="font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700" id="net-val"></span>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ═══ PAGE: MORE ═══ -->
+<!-- ════════════ MORE ════════════ -->
 <div class="page" id="page-more">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">更多</div>
-      <div class="topbar-sub">職涯・交換・社交・股票</div>
-    </div>
+    <div><div class="tb-title">更多</div><div class="tb-sub">目標・交換・職涯・股票・筆記</div></div>
   </div>
   <div class="scroll-area">
 
+    <!-- 1. 年度目標（直接展開，最常用） -->
     <div class="card">
-      <div class="more-item">
-        <div class="more-left">
-          <div class="more-icon">🛡️</div>
-          <div>
-            <div style="font-size:14px;color:var(--text)">證照衝刺</div>
-            <div style="font-size:11px;color:var(--text3)">Security+ 備考中</div>
-          </div>
+      <div class="card-hd">
+        🎯 年度目標
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="card-hd-sub" id="goals-count-lbl"></span>
+          <span class="edit-btn" onclick="openSheet('add-goal')">＋ 新增</span>
         </div>
-        <div class="more-arrow">›</div>
       </div>
-      <div class="more-item">
-        <div class="more-left">
-          <div class="more-icon">✈️</div>
+      <div id="goals-list" class="goals-inline"></div>
+    </div>
+
+    <!-- 2. 交換申請（可展開） -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="toggleColl('exch')">
+        <div class="coll-left">
+          <div class="coll-ic">✈️</div>
           <div>
-            <div style="font-size:14px;color:var(--text)">交換生申請</div>
-            <div style="font-size:11px;color:var(--text3)">3/8 材料完成</div>
+            <div class="coll-name">交換生申請</div>
+            <div class="coll-desc" id="exch-desc">載入中…</div>
           </div>
         </div>
-        <div class="more-arrow">›</div>
+        <div class="coll-right">
+          <span class="edit-btn" onclick="event.stopPropagation();openSheet('add-exch')">＋</span>
+          <div class="coll-arr" id="arr-exch">›</div>
+        </div>
       </div>
-      <div class="more-item">
-        <div class="more-left">
-          <div class="more-icon">🗂️</div>
-          <div>
-            <div style="font-size:14px;color:var(--text)">專案作品集</div>
-            <div style="font-size:11px;color:var(--text3)">2 個完成 · 1 開發中</div>
-          </div>
-        </div>
-        <div class="more-arrow">›</div>
-      </div>
-      <div class="more-item">
-        <div class="more-left">
-          <div class="more-icon">📈</div>
-          <div>
-            <div style="font-size:14px;color:var(--text)">股票觀察清單</div>
-            <div style="font-size:11px;color:var(--text3)">台積電、群創、0050</div>
-          </div>
-        </div>
-        <div class="more-arrow">›</div>
-      </div>
-      <div class="more-item" style="border-bottom:none">
-        <div class="more-left">
-          <div class="more-icon">💜</div>
-          <div>
-            <div style="font-size:14px;color:var(--text)">社交能量日誌</div>
-            <div style="font-size:11px;color:var(--text3)">本週能量：尚可</div>
-          </div>
-        </div>
-        <div class="more-arrow">›</div>
+      <div class="coll-body" id="body-exch">
+        <div class="coll-inner" id="exch-list-inline"></div>
       </div>
     </div>
 
-    <!-- Year goals -->
-    <div class="card">
-      <div class="card-title">2025 年度目標</div>
-      <div class="course-item">
-        <span class="course-name">通過 JLPT N2</span>
-        <span class="status s-doing">準備中</span>
+    <!-- 3. 職涯・證照（可展開） -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="toggleColl('career')">
+        <div class="coll-left">
+          <div class="coll-ic">🛡️</div>
+          <div>
+            <div class="coll-name">職涯・證照衝刺</div>
+            <div class="coll-desc">資安路線規劃</div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <div class="coll-arr" id="arr-career">›</div>
+        </div>
       </div>
-      <div class="course-item">
-        <span class="course-name">取得 Security+ 認證</span>
-        <span class="status s-doing">備考中</span>
+      <div class="coll-body" id="body-career">
+        <div class="coll-inner">
+          <div class="cert-item"><span class="cert-name">① CompTIA Security+</span><span class="badge b-doing">備考中</span></div>
+          <div class="cert-item"><span class="cert-name">② CEH 道德駭客</span><span class="badge b-todo">大三目標</span></div>
+          <div class="cert-item"><span class="cert-name">③ OSCP 滲透測試</span><span class="badge b-todo">長期</span></div>
+          <div class="cert-item" style="border:none"><span class="cert-name">④ JLPT N2</span><span class="badge b-doing">2026.7.5</span></div>
+          <div style="font-size:12px;color:var(--text3);padding:10px 0 4px;line-height:1.8">
+            證照詳情請至「學分」頁面管理 →
+          </div>
+        </div>
       </div>
-      <div class="course-item">
-        <span class="course-name">提交交換生申請</span>
-        <span class="status s-todo">未開始</span>
+    </div>
+
+    <!-- 4. 股票（點開 Sheet，加強版） -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="openSheet('stocks')" style="border-bottom:none">
+        <div class="coll-left">
+          <div class="coll-ic">📈</div>
+          <div>
+            <div class="coll-name">股票觀察清單</div>
+            <div class="coll-desc" id="stock-desc">載入中…</div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <span class="edit-btn" onclick="event.stopPropagation();openSheet('add-stock')">＋</span>
+          <div class="coll-arr">›</div>
+        </div>
       </div>
-      <div class="course-item">
-        <span class="course-name">存款達 10 萬元</span>
-        <span class="status s-doing">48%</span>
+    </div>
+
+    <!-- 5. 課表（可展開） -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="toggleColl('tt')">
+        <div class="coll-left">
+          <div class="coll-ic">📅</div>
+          <div>
+            <div class="coll-name">週課表</div>
+            <div class="coll-desc">113-2 大二下</div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <div class="coll-arr" id="arr-tt">›</div>
+        </div>
       </div>
-      <div class="course-item">
-        <span class="course-name">完成 2 個個人專案</span>
-        <span class="status s-doing">1/2</span>
+      <div class="coll-body" id="body-tt">
+        <div class="coll-inner">
+          <div class="tt-grid" id="tt-grid"></div>
+          <div class="hint">✎ 點格子可輸入課程名稱</div>
+        </div>
       </div>
-      <div class="course-item" style="border:none">
-        <span class="course-name">維持 GPA 3.7 以上</span>
-        <span class="status s-done">✓ 3.68</span>
+    </div>
+
+    <!-- 6. 讀書筆記 -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="toggleColl('notes')">
+        <div class="coll-left">
+          <div class="coll-ic">📝</div>
+          <div>
+            <div class="coll-name">讀書筆記</div>
+            <div class="coll-desc" id="notes-desc">載入中…</div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <span class="edit-btn" onclick="event.stopPropagation();openSheet('add-note')">＋</span>
+          <div class="coll-arr" id="arr-notes">›</div>
+        </div>
+      </div>
+      <div class="coll-body" id="body-notes">
+        <div class="coll-inner" id="notes-list"></div>
+      </div>
+    </div>
+
+    <!-- 7. 作品集 -->
+    <div class="card" style="padding:0 16px">
+      <div class="coll-hd" onclick="toggleColl('portfolio')">
+        <div class="coll-left">
+          <div class="coll-ic">🗂️</div>
+          <div>
+            <div class="coll-name">作品集・專案</div>
+            <div class="coll-desc" id="portfolio-desc">載入中…</div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <span class="edit-btn" onclick="event.stopPropagation();openSheet('add-project')">＋</span>
+          <div class="coll-arr" id="arr-portfolio">›</div>
+        </div>
+      </div>
+      <div class="coll-body" id="body-portfolio">
+        <div class="coll-inner" id="portfolio-list"></div>
       </div>
     </div>
 
   </div>
 </div>
 
-</div><!-- end #app -->
-
-<!-- ═══ TAB BAR ═══ -->
+<!-- ════════════ TABBAR ════════════ -->
 <nav class="tabbar">
-  <div class="tab-item active" onclick="switchTab('home',this)">
-    <div class="tab-icon">🏠</div>
-    <div class="tab-label">首頁</div>
-  </div>
-  <div class="tab-item" onclick="switchTab('habits',this)">
-    <div class="tab-icon">✅</div>
-    <div class="tab-label">習慣</div>
-  </div>
-  <div class="tab-item" onclick="switchTab('courses',this)">
-    <div class="tab-icon">📚</div>
-    <div class="tab-label">學分</div>
-  </div>
-  <div class="tab-item" onclick="switchTab('finance',this)">
-    <div class="tab-icon">💰</div>
-    <div class="tab-label">理財</div>
-  </div>
-  <div class="tab-item" onclick="switchTab('more',this)">
-    <div class="tab-icon">☰</div>
-    <div class="tab-label">更多</div>
-  </div>
+  <div class="tab active" onclick="switchTab('home',this)"><div class="tab-ic">🏠</div><div class="tab-lb">首頁</div></div>
+  <div class="tab" onclick="switchTab('todos',this)"><div class="tab-ic">✅</div><div class="tab-lb">待辦</div></div>
+  <div class="tab" onclick="switchTab('courses',this)"><div class="tab-ic">📚</div><div class="tab-lb">學分</div></div>
+  <div class="tab" onclick="switchTab('finance',this)"><div class="tab-ic">💰</div><div class="tab-lb">理財</div></div>
+  <div class="tab" onclick="switchTab('more',this)"><div class="tab-ic">☰</div><div class="tab-lb">更多</div></div>
 </nav>
 
-<!-- ═══ SLIDER POPUP ═══ -->
-<div class="slider-popup" id="slider-popup">
-  <div class="slider-title" id="slider-title">調整進度</div>
-  <div class="slider-val"><span id="slider-display">0</span>%</div>
-  <input type="range" id="slider-input" min="0" max="100" value="0" oninput="updateSliderDisplay()">
-  <div class="slider-actions">
-    <button class="btn-cancel" onclick="closeSlider()">取消</button>
-    <button class="btn-save" onclick="saveSlider()">儲存</button>
+<!-- ════════════ SLIDER ════════════ -->
+<div class="sl-popup" id="sl-popup">
+  <div class="sl-title" id="sl-title">調整進度</div>
+  <div class="sl-sub" id="sl-sub"></div>
+  <div class="sl-val"><span id="sl-display">0</span>%</div>
+  <input type="range" id="sl-range" min="0" max="100" oninput="document.getElementById('sl-display').textContent=this.value">
+  <div class="sl-acts">
+    <button class="sl-cancel" onclick="closeSlider()">取消</button>
+    <button class="sl-save" onclick="saveSlider()">儲存 →</button>
   </div>
 </div>
 
-<!-- ═══ RECORD POPUP ═══ -->
-<div class="record-popup" id="record-popup" onclick="if(event.target===this)closeRecord()">
-  <div class="record-sheet">
-    <div class="record-title">
-      記一筆帳
-      <button class="close-btn" onclick="closeRecord()">×</button>
+<!-- ════════════ SHEETS ════════════ -->
+
+<!-- Add Todo -->
+<div class="overlay" id="sheet-add-todo" onclick="if(event.target===this)closeSheet('add-todo')">
+  <div class="sheet">
+    <div class="sheet-title">新增待辦 <button class="close-x" onclick="closeSheet('add-todo')">×</button></div>
+    <div class="field"><label>事項內容</label><input id="todo-text-inp" placeholder="今天要做什麼？"></div>
+    <div class="row2">
+      <div class="field"><label>分類</label>
+        <select id="todo-cat-inp">
+          <option>📚 課業</option><option>🎌 日語</option><option>💻 程式</option>
+          <option>🛡️ 資安</option><option>💰 理財</option><option>🏃 運動</option>
+          <option>✈️ 交換</option><option>📝 其他</option>
+        </select>
+      </div>
+      <div class="field"><label>優先度</label>
+        <select id="todo-pri-inp">
+          <option value="normal">一般</option>
+          <option value="high">🔴 急</option>
+          <option value="low">⬇️ 低</option>
+        </select>
+      </div>
     </div>
-    <div class="record-field">
-      <label>類型</label>
-      <select id="rec-type">
-        <option>支出</option>
-        <option>收入</option>
+    <button class="btn-main" onclick="addTodo()">新增</button>
+  </div>
+</div>
+
+<!-- Add Course -->
+<div class="overlay" id="sheet-add-course" onclick="if(event.target===this)closeSheet('add-course')">
+  <div class="sheet">
+    <div class="sheet-title">新增課程 <button class="close-x" onclick="closeSheet('add-course')">×</button></div>
+    <div class="field"><label>課程名稱</label><input id="cr-name-inp" placeholder="例：資料結構"></div>
+    <div class="row2">
+      <div class="field"><label>學分數</label><input type="number" id="cr-cred-inp" placeholder="3" min="1" max="6"></div>
+      <div class="field"><label>類型</label>
+        <select id="cr-type-inp">
+          <option value="required">必修</option><option value="elective">選修</option>
+          <option value="general">通識</option><option value="phys">體育</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>成績（選填）</label><input id="cr-grade-inp" placeholder="A / 90"></div>
+      <div class="field"><label>狀態</label>
+        <select id="cr-status-inp">
+          <option value="ongoing">修課中</option><option value="done">已完成</option><option value="planned">規劃</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-main" onclick="addCourse()">新增</button>
+  </div>
+</div>
+
+<!-- Edit Credits -->
+<div class="overlay" id="sheet-edit-credits" onclick="if(event.target===this)closeSheet('edit-credits')">
+  <div class="sheet">
+    <div class="sheet-title">學分目標設定 <button class="close-x" onclick="closeSheet('edit-credits')">×</button></div>
+    <div class="row2">
+      <div class="field"><label>畢業總學分</label><input type="number" id="ec-total" placeholder="128"></div>
+      <div class="field"><label>目前 GPA</label><input type="number" id="ec-gpa" placeholder="3.50" step="0.01"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>必修需求</label><input type="number" id="ec-req" placeholder="80"></div>
+      <div class="field"><label>選修需求</label><input type="number" id="ec-ele" placeholder="32"></div>
+    </div>
+    <div class="field"><label>通識需求</label><input type="number" id="ec-gen" placeholder="16"></div>
+    <button class="btn-main" onclick="saveCreditSettings()">儲存</button>
+  </div>
+</div>
+
+<!-- Add Cert -->
+<div class="overlay" id="sheet-add-cert" onclick="if(event.target===this)closeSheet('add-cert')">
+  <div class="sheet">
+    <div class="sheet-title">新增證照 <button class="close-x" onclick="closeSheet('add-cert')">×</button></div>
+    <div class="field"><label>證照名稱</label><input id="cert-name-inp" placeholder="例：JLPT N2"></div>
+    <div class="row2">
+      <div class="field"><label>取得日期</label><input type="date" id="cert-date-inp"></div>
+      <div class="field"><label>狀態</label>
+        <select id="cert-status-inp">
+          <option value="done">已取得</option><option value="doing">備考中</option><option value="todo">規劃中</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-main" onclick="addCert()">新增</button>
+  </div>
+</div>
+
+<!-- Add Finance -->
+<div class="overlay" id="sheet-add-finance" onclick="if(event.target===this)closeSheet('add-finance')">
+  <div class="sheet">
+    <div class="sheet-title">記一筆帳 <button class="close-x" onclick="closeSheet('add-finance')">×</button></div>
+    <div class="row2">
+      <div class="field"><label>類型</label>
+        <select id="fin-type"><option value="expense">支出</option><option value="income">收入</option></select>
+      </div>
+      <div class="field"><label>金額（TWD）</label><input type="number" id="fin-amt-inp" placeholder="0"></div>
+    </div>
+    <div class="field"><label>項目名稱</label><input id="fin-name-inp" placeholder="例：午餐"></div>
+    <button class="btn-main" onclick="addFinFromSheet()">記帳</button>
+  </div>
+</div>
+
+<!-- Edit Savings -->
+<div class="overlay" id="sheet-edit-savings" onclick="if(event.target===this)closeSheet('edit-savings')">
+  <div class="sheet">
+    <div class="sheet-title">編輯存款目標 <button class="close-x" onclick="closeSheet('edit-savings')">×</button></div>
+    <div class="field"><label>目前存款（TWD）</label><input type="number" id="sav-now-inp"></div>
+    <div class="field"><label>目標金額（TWD）</label><input type="number" id="sav-goal-inp"></div>
+    <button class="btn-main" onclick="saveSavings()">儲存</button>
+  </div>
+</div>
+
+<!-- Add Goal -->
+<div class="overlay" id="sheet-add-goal" onclick="if(event.target===this)closeSheet('add-goal')">
+  <div class="sheet">
+    <div class="sheet-title">新增年度目標 <button class="close-x" onclick="closeSheet('add-goal')">×</button></div>
+    <div class="field"><label>目標內容</label><input id="goal-inp" placeholder="例：通過 JLPT N2"></div>
+    <div class="field"><label>分類</label>
+      <select id="goal-cat-inp">
+        <option>🎌 語言</option><option>🛡️ 資安</option><option>💰 理財</option>
+        <option>🎓 學業</option><option>✈️ 交換</option><option>💪 健康</option><option>📝 其他</option>
       </select>
     </div>
-    <div class="record-field">
-      <label>金額（TWD）</label>
-      <input type="number" id="rec-amount" placeholder="0">
+    <button class="btn-main" onclick="addGoal()">新增</button>
+  </div>
+</div>
+
+<!-- Add Exchange item -->
+<div class="overlay" id="sheet-add-exch" onclick="if(event.target===this)closeSheet('add-exch')">
+  <div class="sheet">
+    <div class="sheet-title">新增申請材料 <button class="close-x" onclick="closeSheet('add-exch')">×</button></div>
+    <div class="field"><label>材料名稱</label><input id="exch-new-inp" placeholder="例：自傳（日文版）"></div>
+    <button class="btn-main" onclick="addExchItem()">新增</button>
+  </div>
+</div>
+
+<!-- Stocks Sheet（加強版） -->
+<div class="overlay" id="sheet-stocks" onclick="if(event.target===this)closeSheet('stocks')">
+  <div class="sheet">
+    <div class="sheet-title">股票觀察清單 <button class="close-x" onclick="closeSheet('stocks')">×</button></div>
+    <div id="stock-sheet-list"></div>
+    <div class="hint" style="margin-top:8px">✎ 僅供學習記錄，非投資建議</div>
+  </div>
+</div>
+
+<!-- Add Stock（加強版） -->
+<div class="overlay" id="sheet-add-stock" onclick="if(event.target===this)closeSheet('add-stock')">
+  <div class="sheet">
+    <div class="sheet-title">新增股票 <button class="close-x" onclick="closeSheet('add-stock')">×</button></div>
+    <div class="row2">
+      <div class="field"><label>股號</label><input id="stk-code-inp" placeholder="2330"></div>
+      <div class="field"><label>名稱</label><input id="stk-name-inp" placeholder="台積電"></div>
     </div>
-    <div class="record-field">
-      <label>分類</label>
-      <select id="rec-cat">
-        <option>🍜 餐飲</option>
-        <option>🚌 交通</option>
-        <option>📚 教材書籍</option>
-        <option>🎮 娛樂</option>
-        <option>📱 手機網路</option>
-        <option>🛒 其他</option>
+    <div class="row2">
+      <div class="field"><label>買入/關注價位（TWD）</label><input type="number" id="stk-price-inp" placeholder="750"></div>
+      <div class="field"><label>目標價（TWD）</label><input type="number" id="stk-target-inp" placeholder="900"></div>
+    </div>
+    <div class="field"><label>買入理由 / 觀察重點</label><textarea id="stk-reason-inp" placeholder="例：AI 需求帶動，跌破年線時關注，長期持有標的"></textarea></div>
+    <div class="field"><label>狀態</label>
+      <select id="stk-status-inp">
+        <option value="watch">觀察中</option><option value="held">已持有</option><option value="sold">已賣出</option>
       </select>
     </div>
-    <div class="record-field">
-      <label>備註</label>
-      <input type="text" id="rec-note" placeholder="選填">
+    <button class="btn-main" onclick="addStock()">新增</button>
+  </div>
+</div>
+
+<!-- Add Note -->
+<div class="overlay" id="sheet-add-note" onclick="if(event.target===this)closeSheet('add-note')">
+  <div class="sheet">
+    <div class="sheet-title">新增讀書筆記 <button class="close-x" onclick="closeSheet('add-note')">×</button></div>
+    <div class="field"><label>標題</label><input id="note-title-inp" placeholder="例：計算機組織 Ch.3 重點"></div>
+    <div class="field"><label>分類</label>
+      <select id="note-tag-inp">
+        <option>📚 課業</option><option>🎌 日語</option><option>🛡️ 資安</option>
+        <option>💻 程式</option><option>📖 閱讀</option><option>📝 其他</option>
+      </select>
     </div>
-    <button class="btn-save" style="width:100%;margin-top:4px" onclick="saveRecord()">儲存</button>
+    <div class="field"><label>內容摘要</label><textarea id="note-body-inp" placeholder="重點整理…"></textarea></div>
+    <button class="btn-main" onclick="addNote()">新增</button>
+  </div>
+</div>
+
+<!-- Add Project -->
+<div class="overlay" id="sheet-add-project" onclick="if(event.target===this)closeSheet('add-project')">
+  <div class="sheet">
+    <div class="sheet-title">新增專案 <button class="close-x" onclick="closeSheet('add-project')">×</button></div>
+    <div class="field"><label>專案名稱</label><input id="proj-name-inp" placeholder="例：拉麵推薦網站"></div>
+    <div class="field"><label>簡介</label><textarea id="proj-desc-inp" placeholder="專案說明…"></textarea></div>
+    <div class="field"><label>技術棧（用空格分隔）</label><input id="proj-tags-inp" placeholder="HTML CSS JavaScript"></div>
+    <div class="field"><label>狀態</label>
+      <select id="proj-status-inp">
+        <option value="done">已完成</option><option value="doing">開發中</option><option value="planned">規劃</option>
+      </select>
+    </div>
+    <button class="btn-main" onclick="addProject()">新增</button>
   </div>
 </div>
 
 <script>
-// ── DATE ──
-const d = new Date();
-document.getElementById('today-str').innerHTML =
-  d.toLocaleDateString('zh-TW',{month:'long',day:'numeric'}) + '<br>' +
-  ['日','一','二','三','四','五','六'][d.getDay()] + '曜日';
-
-// ── N2 COUNTDOWN ──
-const n2 = new Date('2025-07-05');
-const diff = Math.ceil((n2 - new Date()) / 86400000);
-document.getElementById('n2-days').textContent = diff > 0 ? diff : '已考';
-
-// ── TAB SWITCHING ──
-function switchTab(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  el.classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ── TODO ──
-function toggleTodo(el) {
-  el.classList.toggle('done');
-  const box = el.querySelector('.todo-check');
-  box.textContent = el.classList.contains('done') ? '✓' : '';
-  updateTodoCount();
-}
-
-function updateTodoCount() {
-  const all = document.querySelectorAll('.todo-item').length;
-  const done = document.querySelectorAll('.todo-item.done').length;
-  document.getElementById('todo-count').textContent = done + '/' + all + ' 完成';
-}
-
-function addTodo() {
-  const input = document.getElementById('new-todo-input');
-  const val = input.value.trim();
-  if (!val) return;
-  const list = document.getElementById('todo-list');
-  const item = document.createElement('div');
-  item.className = 'todo-item';
-  item.setAttribute('onclick', 'toggleTodo(this)');
-  item.innerHTML = `<div class="todo-check"></div><div class="todo-text">${val}</div><div class="todo-tag">自訂</div>`;
-  list.appendChild(item);
-  input.value = '';
-  updateTodoCount();
-}
-
-updateTodoCount();
-
-// ── HABITS ──
-const habits = [
-  { name: '🏃 運動', color: '#4a7c6f', done: [1,0,1,1,0,1,0] },
-  { name: '📖 閱讀', color: '#5b7fa6', done: [1,1,1,0,1,1,1] },
-  { name: '🎌 日語', color: '#6b5c4e', done: [1,1,1,1,1,0,1] },
-  { name: '💻 Coding', color: '#9b6b9b', done: [0,1,1,0,1,0,0] },
-  { name: '💤 早睡', color: '#c4773a', done: [0,0,1,0,1,0,0] },
-];
-
-const habitGrid = document.getElementById('habit-grid');
-
-habits.forEach(h => {
-  const row = document.createElement('div');
-  row.className = 'habit-row';
-  const nameEl = document.createElement('div');
-  nameEl.className = 'habit-name';
-  nameEl.textContent = h.name;
-  row.appendChild(nameEl);
-  h.done.forEach((v, i) => {
-    const cell = document.createElement('div');
-    cell.className = 'hday' + (v ? ' done' : '');
-    cell.style.background = v ? h.color : '';
-    cell.textContent = v ? '✓' : '';
-    cell.onclick = () => {
-      cell.classList.toggle('done');
-      const on = cell.classList.contains('done');
-      cell.style.background = on ? h.color : '';
-      cell.textContent = on ? '✓' : '';
-      updateHabitRate();
-    };
-    row.appendChild(cell);
-  });
-  habitGrid.appendChild(row);
-});
-
-function updateHabitRate() {
-  const all = document.querySelectorAll('.hday').length;
-  const done = document.querySelectorAll('.hday.done').length;
-  const pct = Math.round(done / all * 100);
-  document.getElementById('habit-rate').textContent = pct + '% 達成';
-  document.getElementById('habit-pct-text').textContent = pct + '%';
-}
-
-updateHabitRate();
-
-// ── SLIDER (N2 Progress) ──
-let currentSliderKey = null;
-const sliderMap = {
-  vocab:   { bar: 'bar-vocab',   pct: 'pct-vocab',   label: '單字進度' },
-  grammar: { bar: 'bar-grammar', pct: 'pct-grammar',  label: '語法進度' },
-  listen:  { bar: 'bar-listen',  pct: 'pct-listen',   label: '聽力進度' },
-  read:    { bar: 'bar-read',    pct: 'pct-read',     label: '讀解進度' },
+// ════════════ STATE ════════════
+const S = {
+  n2Date: new Date('2026-07-05'),
+  credits: {total:128,req:80,ele:32,gen:16,gpa:3.52},
+  courses: [
+    {name:'資料結構',credits:3,type:'required',grade:'',status:'ongoing'},
+    {name:'計算機組織',credits:3,type:'required',grade:'',status:'ongoing'},
+    {name:'機率與統計',credits:3,type:'required',grade:'',status:'ongoing'},
+    {name:'作業系統概論',credits:3,type:'required',grade:'',status:'ongoing'},
+    {name:'日語文法初級',credits:2,type:'general',grade:'',status:'ongoing'},
+    {name:'體育（羽球）',credits:1,type:'phys',grade:'',status:'ongoing'},
+    {name:'線性代數',credits:3,type:'required',grade:'B+',status:'done'},
+    {name:'程式設計(一)',credits:3,type:'required',grade:'A',status:'done'},
+    {name:'程式設計(二)',credits:3,type:'required',grade:'A-',status:'done'},
+    {name:'離散數學',credits:3,type:'required',grade:'B+',status:'done'},
+    {name:'物件導向程式',credits:3,type:'required',grade:'A',status:'done'},
+  ],
+  certs: [
+    {name:'JLPT N3',date:'2024-12-01',status:'done'},
+    {name:'CompTIA Security+',date:'',status:'doing'},
+  ],
+  todos: [
+    {text:'N2 模擬測驗 第14回',cat:'🎌 日語',pri:'high',done:false},
+    {text:'資料結構 Ch.6 預習',cat:'📚 課業',pri:'normal',done:false},
+    {text:'GitHub README 更新',cat:'💻 程式',pri:'normal',done:true},
+    {text:'記帳：今日支出',cat:'💰 理財',pri:'low',done:false},
+    {text:'申請在校成績單',cat:'✈️ 交換',pri:'normal',done:false},
+  ],
+  income: [
+    {name:'家庭生活費',amt:8000},
+    {name:'獎學金',amt:5000},
+    {name:'接案收入',amt:2000},
+  ],
+  expense: [
+    {name:'🍜 餐飲',amt:4200},
+    {name:'🚌 交通',amt:980},
+    {name:'📚 教材書籍',amt:1800},
+    {name:'📱 手機網路',amt:699},
+    {name:'🎮 娛樂',amt:1200},
+  ],
+  savings: {now:48500,goal:100000},
+  exchange: [
+    {text:'在校成績單（英文版）',done:true},
+    {text:'學生在籍證明（英文版）',done:true},
+    {text:'護照掃描件',done:true},
+    {text:'自傳（日文/英文）',done:false},
+    {text:'讀書計畫',done:false},
+    {text:'語言能力證明（JLPT N2）',done:false},
+    {text:'指導教授推薦信',done:false},
+    {text:'健康檢查證明',done:false},
+  ],
+  stocks: [
+    {code:'2330',name:'台積電',price:750,target:900,reason:'AI 需求帶動，長期持有。跌破年線時加碼觀察。',status:'watch'},
+    {code:'3481',name:'群創',price:14,target:18,reason:'光電族群輪動，跌至年線支撐時關注反彈。',status:'watch'},
+    {code:'0050',name:'元大台灣50',price:null,target:null,reason:'每月定期定額 3,000 元，長期複利，不看短線。',status:'held'},
+  ],
+  goals: [
+    {text:'通過 JLPT N2',cat:'🎌 語言',done:false},
+    {text:'取得 Security+ 認證',cat:'🛡️ 資安',done:false},
+    {text:'提交交換生申請',cat:'✈️ 交換',done:false},
+    {text:'累積存款達 10 萬元',cat:'💰 理財',done:false},
+    {text:'維持 GPA 3.6 以上',cat:'🎓 學業',done:false},
+  ],
+  notes: [
+    {title:'JLPT N2 語法重點整理',tag:'🎌 日語',body:'～にもかかわらず（儘管）、～からには（既然）、～をはじめ（以…為首）',date:'2026-04-01'},
+    {title:'資料結構 Hash Table',tag:'📚 課業',body:'開放定址 vs 鏈結法、負載因子 < 0.7、rehash 時機',date:'2026-03-28'},
+  ],
+  projects: [
+    {name:'拉麵推薦網站',desc:'整合台中各家拉麵店資料，依風味分類推薦，含評分系統。',tags:['HTML','CSS','JavaScript'],status:'done'},
+    {name:'Pikmin 追蹤器',desc:'遊戲進度紀錄工具，追蹤各地區 Pikmin 收集數與任務完成度。',tags:['HTML','CSS','JS','LocalStorage'],status:'done'},
+    {name:'CTF 工具箱',desc:'整合常用資安工具的 Web 前端，方便 CTF 比賽快速使用。',tags:['React','Python'],status:'doing'},
+  ],
+  n2Progs: [
+    {key:'vocab', label:'📖 單字',val:68,color:'var(--accent)'},
+    {key:'gram',  label:'✏️ 語法',val:52,color:'var(--accent5)'},
+    {key:'listen',label:'🎧 聽力',val:40,color:'var(--accent2)'},
+    {key:'read',  label:'📝 讀解',val:35,color:'var(--accent3)'},
+  ],
+  timetable: {},  // {`${day}-${slot}`: '課程名'}
 };
 
-// Show one slider at a time cycling through all 4
-let sliderQueue = [];
-let sliderIdx = 0;
+// ════════════ INIT ════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  setDate(); setCountdown();
+  renderN2Progs(); renderTodos(); renderCourses(); renderCerts();
+  renderFinance(); renderSavings();
+  renderGoals(); renderExchange(); renderNotes(); renderPortfolio();
+  renderStockSheet(); updateStockDesc();
+  buildTimetable();
+  updateHomeTiles();
+});
 
-function openSlider(mode) {
-  sliderQueue = ['vocab','grammar','listen','read'];
-  sliderIdx = 0;
-  loadSlider(sliderQueue[0]);
-  document.getElementById('slider-popup').classList.add('show');
+// ── Date & Countdown ──
+function setDate(){
+  const d=new Date();
+  document.getElementById('home-date').innerHTML=
+    d.toLocaleDateString('zh-TW',{month:'long',day:'numeric'})+'<br>'+
+    ['日','一','二','三','四','五','六'][d.getDay()]+'曜日';
+}
+function setCountdown(){
+  const diff=Math.ceil((S.n2Date-new Date())/86400000);
+  document.getElementById('n2-days').textContent=diff>0?diff:'已考完';
 }
 
-function loadSlider(key) {
-  currentSliderKey = key;
-  const map = sliderMap[key];
-  const currentPct = parseInt(document.getElementById(map.pct).textContent);
-  document.getElementById('slider-title').textContent = '調整：' + map.label;
-  document.getElementById('slider-input').value = currentPct;
-  document.getElementById('slider-display').textContent = currentPct;
+// ── Tab ──
+function switchTab(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function updateSliderDisplay() {
-  document.getElementById('slider-display').textContent = document.getElementById('slider-input').value;
+// ── Sheets ──
+function openSheet(id){
+  if(id==='edit-savings'){document.getElementById('sav-now-inp').value=S.savings.now;document.getElementById('sav-goal-inp').value=S.savings.goal;}
+  if(id==='edit-credits'){document.getElementById('ec-total').value=S.credits.total;document.getElementById('ec-gpa').value=S.credits.gpa;document.getElementById('ec-req').value=S.credits.req;document.getElementById('ec-ele').value=S.credits.ele;document.getElementById('ec-gen').value=S.credits.gen;}
+  if(id==='stocks') renderStockSheet();
+  document.getElementById('sheet-'+id).classList.add('show');
+}
+function closeSheet(id){document.getElementById('sheet-'+id).classList.remove('show');}
+
+// ── Collapsible ──
+function toggleColl(key){
+  const body=document.getElementById('body-'+key);
+  const arr=document.getElementById('arr-'+key);
+  const open=body.classList.toggle('open');
+  if(arr) arr.classList.toggle('open',open);
 }
 
-function saveSlider() {
-  if (!currentSliderKey) return;
-  const val = document.getElementById('slider-input').value;
-  const map = sliderMap[currentSliderKey];
-  document.getElementById(map.bar).style.width = val + '%';
-  document.getElementById(map.pct).textContent = val + '%';
+// ── N2 Progs ──
+function renderN2Progs(){
+  const c=document.getElementById('n2-progs');
+  c.innerHTML='';
+  S.n2Progs.forEach(p=>{
+    c.innerHTML+=`<div class="prog"><div class="prog-hd"><span class="prog-lb">${p.label}</span><span class="prog-pc" id="pct-${p.key}">${p.val}%</span></div><div class="prog-tr"><div class="prog-fl" id="bar-${p.key}" style="width:${p.val}%;background:${p.color}"></div></div></div>`;
+  });
+}
 
-  sliderIdx++;
-  if (sliderIdx < sliderQueue.length) {
-    loadSlider(sliderQueue[sliderIdx]);
+// Slider
+let slIdx=0;
+function openSlider(i){slIdx=i;loadSlider();document.getElementById('sl-popup').classList.add('show');}
+function loadSlider(){
+  const p=S.n2Progs[slIdx];
+  document.getElementById('sl-title').textContent='調整：'+p.label;
+  document.getElementById('sl-sub').textContent=`第 ${slIdx+1}/${S.n2Progs.length} 科`;
+  document.getElementById('sl-range').value=p.val;
+  document.getElementById('sl-display').textContent=p.val;
+}
+function saveSlider(){
+  const val=parseInt(document.getElementById('sl-range').value);
+  S.n2Progs[slIdx].val=val;
+  document.getElementById('pct-'+S.n2Progs[slIdx].key).textContent=val+'%';
+  document.getElementById('bar-'+S.n2Progs[slIdx].key).style.width=val+'%';
+  slIdx++;
+  if(slIdx<S.n2Progs.length) loadSlider();
+  else closeSlider();
+}
+function closeSlider(){document.getElementById('sl-popup').classList.remove('show');slIdx=0;}
+
+// ── Todos ──
+function renderTodos(){
+  // Home: up to 6 undone
+  const hl=document.getElementById('home-todo-list');
+  hl.innerHTML='';
+  const undone=S.todos.filter(t=>!t.done);
+  if(!undone.length){hl.innerHTML='<div style="padding:12px 0;text-align:center;color:var(--text3);font-size:13px">🎉 今日待辦全部完成！</div>';}
+  else undone.slice(0,6).forEach(t=>hl.appendChild(makeTodoEl(t,S.todos.indexOf(t),true)));
+  const done=S.todos.filter(t=>t.done).length;
+  document.getElementById('home-todo-count').textContent=`${done}/${S.todos.length} 完成`;
+
+  // Full page by category
+  const sec=document.getElementById('todo-sections');
+  sec.innerHTML='';
+  const cats={};
+  S.todos.forEach((t,i)=>{if(!cats[t.cat])cats[t.cat]=[];cats[t.cat].push({t,i});});
+  Object.entries(cats).forEach(([cat,items])=>{
+    const d=items.filter(x=>x.t.done).length;
+    const wrap=document.createElement('div');
+    wrap.className='card';
+    wrap.innerHTML=`<div class="card-hd">${cat}<span class="card-hd-sub">${d}/${items.length}</span></div>`;
+    const list=document.createElement('div');
+    items.forEach(({t,i})=>list.appendChild(makeTodoEl(t,i,false)));
+    wrap.appendChild(list);
+    sec.appendChild(wrap);
+  });
+  updateHomeTiles();
+}
+
+function makeTodoEl(t,idx,compact){
+  const el=document.createElement('div');
+  el.className='todo-item'+(t.done?' done':'');
+  el.innerHTML=`<div class="todo-chk">${t.done?'✓':''}</div><div class="todo-txt">${t.pri==='high'?'🔴 ':''}${t.text}</div>${!compact?'<div class="todo-tag">'+t.cat+'</div>':''}<div class="todo-del" onclick="event.stopPropagation();deleteTodo(${idx})">×</div>`;
+  el.addEventListener('click',()=>{S.todos[idx].done=!S.todos[idx].done;renderTodos();});
+  return el;
+}
+function addTodo(){
+  const text=document.getElementById('todo-text-inp').value.trim();
+  if(!text)return;
+  S.todos.unshift({text,cat:document.getElementById('todo-cat-inp').value,pri:document.getElementById('todo-pri-inp').value,done:false});
+  document.getElementById('todo-text-inp').value='';
+  closeSheet('add-todo');renderTodos();
+}
+function deleteTodo(i){S.todos.splice(i,1);renderTodos();}
+
+// ── Courses ──
+function renderCourses(){
+  const all=S.courses.filter(c=>c.status!=='planned');
+  const earned={req:0,ele:0,gen:0,phys:0};
+  all.forEach(c=>earned[c.type]=(earned[c.type]||0)+c.credits);
+  const total=Object.values(earned).reduce((a,b)=>a+b,0);
+  document.getElementById('cr-earned').textContent=total;
+  document.getElementById('cr-gpa').textContent=S.credits.gpa.toFixed(2);
+  document.getElementById('home-credits').textContent=total;
+  document.getElementById('home-total').textContent=S.credits.total;
+  document.getElementById('cr-total').textContent=S.credits.total;
+  const rp=Math.min(100,Math.round(earned.req/S.credits.req*100));
+  const ep=Math.min(100,Math.round((earned.ele||0)/S.credits.ele*100));
+  const gp=Math.min(100,Math.round((earned.gen||0)/S.credits.gen*100));
+  document.getElementById('lbl-req').textContent=`${earned.req}/${S.credits.req}`;
+  document.getElementById('lbl-ele').textContent=`${earned.ele||0}/${S.credits.ele}`;
+  document.getElementById('lbl-gen').textContent=`${earned.gen||0}/${S.credits.gen}`;
+  document.getElementById('bar-req').style.width=rp+'%';
+  document.getElementById('bar-ele').style.width=ep+'%';
+  document.getElementById('bar-gen').style.width=gp+'%';
+  const remain=S.credits.total-total;
+  document.getElementById('cr-remain-hint').textContent=remain>0?`✎ 尚需 ${remain} 學分・預計大四修畢`:'🎉 學分已達畢業門檻！';
+  ['total','req','ele','gen'].forEach(k=>document.getElementById('disp-'+k).textContent=S.credits[k]);
+
+  const list=document.getElementById('course-list');
+  list.innerHTML='';
+  const tl={required:'必修',elective:'選修',general:'通識',phys:'體育'};
+  const tc={required:'var(--accent5)',elective:'var(--accent)',general:'var(--accent3)',phys:'var(--accent2)'};
+  const sl={ongoing:'b-doing',done:'b-done',planned:'b-todo'};
+  const sn={ongoing:'修課中',done:'已完成',planned:'規劃'};
+  S.courses.forEach((c,i)=>{
+    const row=document.createElement('div');
+    row.className='cr-item';
+    row.innerHTML=`<span class="cr-name">${c.name}</span><span style="font-size:11px;color:var(--text3);width:36px;text-align:right;flex-shrink:0">${c.credits}分</span><span class="badge" style="background:rgba(0,0,0,.06);color:${tc[c.type]}">${tl[c.type]}</span><span class="badge ${sl[c.status]}" style="margin-left:4px">${c.grade||sn[c.status]}</span><span style="font-size:16px;color:var(--text3);cursor:pointer;padding-left:6px" onclick="deleteCourse(${i})">×</span>`;
+    list.appendChild(row);
+  });
+}
+function addCourse(){
+  const name=document.getElementById('cr-name-inp').value.trim();if(!name)return;
+  S.courses.unshift({name,credits:parseInt(document.getElementById('cr-cred-inp').value)||3,type:document.getElementById('cr-type-inp').value,grade:document.getElementById('cr-grade-inp').value.trim(),status:document.getElementById('cr-status-inp').value});
+  ['cr-name-inp','cr-cred-inp','cr-grade-inp'].forEach(id=>document.getElementById(id).value='');
+  closeSheet('add-course');renderCourses();
+}
+function deleteCourse(i){S.courses.splice(i,1);renderCourses();}
+function saveCreditSettings(){
+  S.credits.total=parseInt(document.getElementById('ec-total').value)||128;
+  S.credits.gpa=parseFloat(document.getElementById('ec-gpa').value)||S.credits.gpa;
+  S.credits.req=parseInt(document.getElementById('ec-req').value)||80;
+  S.credits.ele=parseInt(document.getElementById('ec-ele').value)||32;
+  S.credits.gen=parseInt(document.getElementById('ec-gen').value)||16;
+  closeSheet('edit-credits');renderCourses();
+}
+
+// ── Certs ──
+function renderCerts(){
+  const list=document.getElementById('cert-list');list.innerHTML='';
+  const sc={done:'b-done',doing:'b-doing',todo:'b-todo'};
+  const sn={done:'已取得',doing:'備考中',todo:'規劃中'};
+  S.certs.forEach((c,i)=>{
+    const row=document.createElement('div');row.className='cert-item';
+    row.innerHTML=`<span class="cert-name">🏅 ${c.name}</span>${c.date?`<span style="font-size:11px;color:var(--text3)">${c.date}</span>`:''}<span class="badge ${sc[c.status]}">${sn[c.status]}</span><span style="font-size:16px;color:var(--text3);cursor:pointer;padding-left:6px" onclick="deleteCert(${i})">×</span>`;
+    list.appendChild(row);
+  });
+}
+function addCert(){
+  const name=document.getElementById('cert-name-inp').value.trim();if(!name)return;
+  S.certs.push({name,date:document.getElementById('cert-date-inp').value,status:document.getElementById('cert-status-inp').value});
+  document.getElementById('cert-name-inp').value='';document.getElementById('cert-date-inp').value='';
+  closeSheet('add-cert');renderCerts();
+}
+function deleteCert(i){S.certs.splice(i,1);renderCerts();}
+
+// ── Finance ──
+function renderFinance(){
+  renderFinList('income-list',S.income,'income');
+  renderFinList('expense-list',S.expense,'expense');
+  calcNet();
+}
+function renderFinList(elId,arr,type){
+  const el=document.getElementById(elId);el.innerHTML='';
+  let total=0;
+  arr.forEach((item,i)=>{
+    total+=item.amt;
+    const row=document.createElement('div');row.className='fin-item';
+    row.innerHTML=`<span class="fin-cat">${item.name}</span><span class="fin-amt ${type==='income'?'fin-inc':'fin-exp'}">${type==='income'?'+':'−'}<input class="num-inp" value="${item.amt.toLocaleString()}" onchange="updateFinAmt('${type}',${i},this.value)"></span><span style="font-size:16px;color:var(--text3);cursor:pointer;padding-left:8px" onclick="delFinItem('${type}',${i})">×</span>`;
+    el.appendChild(row);
+  });
+  document.getElementById('total-'+(type==='income'?'inc':'exp')+'-lbl').textContent='共 '+total.toLocaleString()+' TWD';
+}
+function updateFinAmt(type,idx,val){(type==='income'?S.income:S.expense)[idx].amt=parseInt(val.replace(/,/g,''))||0;calcNet();}
+function delFinItem(type,idx){(type==='income'?S.income:S.expense).splice(idx,1);renderFinance();}
+function addFinItem(type){
+  const nId=type==='income'?'inc-name':'exp-name',aId=type==='income'?'inc-amt':'exp-amt';
+  const name=document.getElementById(nId).value.trim(),amt=parseInt(document.getElementById(aId).value)||0;
+  if(!name||!amt)return;
+  (type==='income'?S.income:S.expense).push({name,amt});
+  document.getElementById(nId).value='';document.getElementById(aId).value='';
+  renderFinance();
+}
+function addFinFromSheet(){
+  const type=document.getElementById('fin-type').value==='收入'?'income':'expense';
+  const name=document.getElementById('fin-name-inp').value.trim(),amt=parseInt(document.getElementById('fin-amt-inp').value)||0;
+  if(!name||!amt){closeSheet('add-finance');return;}
+  (type==='income'?S.income:S.expense).push({name,amt});
+  document.getElementById('fin-name-inp').value='';document.getElementById('fin-amt-inp').value='';
+  closeSheet('add-finance');renderFinance();
+}
+function calcNet(){
+  const inc=S.income.reduce((a,b)=>a+b.amt,0),exp=S.expense.reduce((a,b)=>a+b.amt,0),net=inc-exp;
+  const el=document.getElementById('net-val');
+  el.textContent=(net>=0?'+':'')+net.toLocaleString()+' TWD';
+  el.style.color=net>=0?'var(--accent2)':'var(--accent4)';
+  document.getElementById('home-balance').textContent=(net>=0?'+':'')+net.toLocaleString();
+  document.getElementById('home-balance').style.color=net>=0?'var(--accent2)':'var(--accent4)';
+}
+
+// ── Savings ──
+function renderSavings(){
+  const {now,goal}=S.savings;
+  const pct=Math.min(100,Math.round(now/goal*100));
+  const circ=2*Math.PI*36,offset=circ*(1-pct/100);
+  document.getElementById('ring-circle').setAttribute('stroke-dashoffset',offset.toFixed(1));
+  document.getElementById('ring-pct').textContent=pct+'%';
+  document.getElementById('sav-now').textContent=now.toLocaleString();
+  document.getElementById('sav-goal').textContent=goal.toLocaleString();
+  document.getElementById('sav-remain').textContent=now<goal?`還差 ${(goal-now).toLocaleString()} 元`:'🎉 目標達成！';
+}
+function saveSavings(){
+  S.savings.now=parseInt(document.getElementById('sav-now-inp').value)||S.savings.now;
+  S.savings.goal=parseInt(document.getElementById('sav-goal-inp').value)||S.savings.goal;
+  closeSheet('edit-savings');renderSavings();
+}
+
+// ── Goals ──
+function renderGoals(){
+  const list=document.getElementById('goals-list');list.innerHTML='';
+  const done=S.goals.filter(g=>g.done).length;
+  document.getElementById('goals-count-lbl').textContent=`${done}/${S.goals.length} 達成`;
+  S.goals.forEach((g,i)=>{
+    const el=document.createElement('div');
+    el.className='todo-item'+(g.done?' done':'');
+    el.innerHTML=`<div class="todo-chk">${g.done?'✓':''}</div><div class="todo-txt">${g.cat} ${g.text}</div><div class="todo-del" onclick="event.stopPropagation();deleteGoal(${i})">×</div>`;
+    el.addEventListener('click',()=>{S.goals[i].done=!S.goals[i].done;renderGoals();});
+    list.appendChild(el);
+  });
+}
+function addGoal(){
+  const text=document.getElementById('goal-inp').value.trim();if(!text)return;
+  S.goals.push({text,cat:document.getElementById('goal-cat-inp').value,done:false});
+  document.getElementById('goal-inp').value='';
+  closeSheet('add-goal');renderGoals();
+}
+function deleteGoal(i){S.goals.splice(i,1);renderGoals();}
+
+// ── Exchange ──
+function renderExchange(){
+  const inline=document.getElementById('exch-list-inline');inline.innerHTML='';
+  const done=S.exchange.filter(e=>e.done).length;
+  document.getElementById('exch-desc').textContent=`${done}/${S.exchange.length} 材料完成`;
+  S.exchange.forEach((e,i)=>{
+    const el=document.createElement('div');el.className='exch-item'+(e.done?' done':'');
+    el.innerHTML=`<div class="exch-chk">${e.done?'✓':''}</div><div class="exch-txt">${e.text}</div><div class="todo-del" onclick="event.stopPropagation();delExch(${i})">×</div>`;
+    el.addEventListener('click',()=>{S.exchange[i].done=!S.exchange[i].done;renderExchange();});
+    inline.appendChild(el);
+  });
+}
+function addExchItem(){
+  const val=document.getElementById('exch-new-inp').value.trim();if(!val)return;
+  S.exchange.push({text:val,done:false});
+  document.getElementById('exch-new-inp').value='';
+  closeSheet('add-exch');renderExchange();
+}
+function delExch(i){S.exchange.splice(i,1);renderExchange();}
+
+// ── Stocks (enhanced) ──
+const statusLabel={watch:'觀察中',held:'已持有',sold:'已賣出'};
+const statusClass={watch:'b-todo',held:'b-doing',sold:'b-done'};
+
+function renderStockSheet(){
+  const list=document.getElementById('stock-sheet-list');list.innerHTML='';
+  if(!S.stocks.length){list.innerHTML='<div style="padding:16px 0;text-align:center;color:var(--text3);font-size:13px">還沒有觀察的股票</div>';return;}
+  S.stocks.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='stock-card';
+    card.innerHTML=`
+      <div class="stock-top">
+        <div><div class="stock-code">${s.code} <span style="font-size:12px;font-weight:400;color:var(--text2)">${s.name}</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="badge ${statusClass[s.status]}">${statusLabel[s.status]}</span>
+          <span class="stock-del" onclick="deleteStock(${i})">刪除</span>
+        </div>
+      </div>
+      ${(s.price||s.target)?`<div class="stock-row2">
+        ${s.price?`<div><div class="stock-field-lb">關注/買入價</div><div class="stock-price-tag" style="color:var(--accent4)">$${s.price.toLocaleString()}</div></div>`:''}
+        ${s.target?`<div><div class="stock-field-lb">目標價</div><div class="stock-price-tag" style="color:var(--accent2)">$${s.target.toLocaleString()}</div></div>`:''}
+      </div>`:''}
+      <div class="stock-field-lb" style="margin-bottom:4px">📝 買入理由 / 觀察重點</div>
+      <div class="stock-reason">${s.reason||'尚未填寫'}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+function addStock(){
+  const code=document.getElementById('stk-code-inp').value.trim(),name=document.getElementById('stk-name-inp').value.trim();
+  if(!code||!name)return;
+  S.stocks.push({
+    code,name,
+    price:parseFloat(document.getElementById('stk-price-inp').value)||null,
+    target:parseFloat(document.getElementById('stk-target-inp').value)||null,
+    reason:document.getElementById('stk-reason-inp').value.trim(),
+    status:document.getElementById('stk-status-inp').value,
+  });
+  ['stk-code-inp','stk-name-inp','stk-price-inp','stk-target-inp','stk-reason-inp'].forEach(id=>document.getElementById(id).value='');
+  closeSheet('add-stock');updateStockDesc();renderStockSheet();
+}
+function deleteStock(i){S.stocks.splice(i,1);updateStockDesc();renderStockSheet();}
+function updateStockDesc(){
+  const names=S.stocks.map(s=>s.name).slice(0,3).join('・');
+  document.getElementById('stock-desc').textContent=names+(S.stocks.length>3?` 等${S.stocks.length}支`:'');
+}
+
+// ── Notes ──
+function renderNotes(){
+  const list=document.getElementById('notes-list');list.innerHTML='';
+  document.getElementById('notes-desc').textContent=`${S.notes.length} 則筆記`;
+  if(!S.notes.length){list.innerHTML='<div style="padding:12px 0;color:var(--text3);font-size:13px">還沒有筆記</div>';return;}
+  S.notes.forEach((n,i)=>{
+    const card=document.createElement('div');card.className='note-card';
+    card.innerHTML=`<div class="note-top"><div class="note-title">${n.title}</div><div style="display:flex;gap:6px;align-items:center"><span class="note-tag">${n.tag}</span><span style="font-size:14px;color:var(--text3);cursor:pointer" onclick="deleteNote(${i})">×</span></div></div><div class="note-body">${n.body}</div><div class="note-date">${n.date}</div>`;
+    list.appendChild(card);
+  });
+}
+function addNote(){
+  const title=document.getElementById('note-title-inp').value.trim();if(!title)return;
+  S.notes.unshift({title,tag:document.getElementById('note-tag-inp').value,body:document.getElementById('note-body-inp').value.trim(),date:new Date().toLocaleDateString('zh-TW')});
+  ['note-title-inp','note-body-inp'].forEach(id=>document.getElementById(id).value='');
+  closeSheet('add-note');renderNotes();
+}
+function deleteNote(i){S.notes.splice(i,1);renderNotes();}
+
+// ── Portfolio ──
+const projStatusLabel={done:'已完成',doing:'開發中',planned:'規劃中'};
+const projStatusClass={done:'b-done',doing:'b-doing',planned:'b-todo'};
+
+function renderPortfolio(){
+  const list=document.getElementById('portfolio-list');list.innerHTML='';
+  document.getElementById('portfolio-desc').textContent=`${S.projects.filter(p=>p.status==='done').length} 完成・${S.projects.filter(p=>p.status==='doing').length} 進行中`;
+  if(!S.projects.length){list.innerHTML='<div style="padding:12px 0;color:var(--text3);font-size:13px">還沒有專案</div>';return;}
+  S.projects.forEach((p,i)=>{
+    const card=document.createElement('div');card.className='proj-card';
+    card.innerHTML=`<div class="proj-name" style="display:flex;justify-content:space-between;align-items:flex-start"><span>${p.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="badge ${projStatusClass[p.status]}">${projStatusLabel[p.status]}</span><span style="font-size:14px;color:var(--text3);cursor:pointer" onclick="deleteProject(${i})">×</span></div></div><div class="proj-desc">${p.desc}</div><div class="proj-tags">${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>`;
+    list.appendChild(card);
+  });
+}
+function addProject(){
+  const name=document.getElementById('proj-name-inp').value.trim();if(!name)return;
+  const tags=document.getElementById('proj-tags-inp').value.trim().split(/\s+/).filter(Boolean);
+  S.projects.unshift({name,desc:document.getElementById('proj-desc-inp').value.trim(),tags,status:document.getElementById('proj-status-inp').value});
+  ['proj-name-inp','proj-desc-inp','proj-tags-inp'].forEach(id=>document.getElementById(id).value='');
+  closeSheet('add-project');renderPortfolio();
+}
+function deleteProject(i){S.projects.splice(i,1);renderPortfolio();}
+
+// ── Timetable ──
+const DAYS=['一','二','三','四','五'];
+const SLOTS=['08:10','09:10','10:10','11:10','13:10','14:10','15:10','16:10'];
+const SLOT_COLORS=['#4f6fa0','#4a7c6f','#c4773a','#b05050','#7a5f9a','#6b5c4e','#4a7c6f','#4f6fa0'];
+
+// Pre-fill some sample classes
+const sampleTT={'0-0':'資料結構','0-1':'資料結構','2-0':'計算機組織','2-1':'計算機組織','4-0':'機率統計','1-2':'作業系統概論','3-2':'作業系統概論','1-4':'日語文法','3-4':'日語文法','0-6':'體育'};
+Object.assign(S.timetable, sampleTT);
+
+function buildTimetable(){
+  const grid=document.getElementById('tt-grid');
+  grid.innerHTML='<div></div>'+DAYS.map(d=>`<div class="tt-hd">${d}</div>`).join('');
+  SLOTS.forEach((time,slot)=>{
+    grid.innerHTML+=`<div class="tt-time">${time}</div>`;
+    DAYS.forEach((_,day)=>{
+      const key=`${day}-${slot}`;
+      const val=S.timetable[key]||'';
+      const color=val?SLOT_COLORS[slot]:'';
+      grid.innerHTML+=`<div class="tt-cell${val?' filled':''}" style="${val?`background:${color};border-color:${color}`:''}" onclick="editTTCell('${key}',this)">${val}</div>`;
+    });
+  });
+}
+
+function editTTCell(key,el){
+  const cur=S.timetable[key]||'';
+  const val=prompt('輸入課程名稱（清空則刪除）：',cur);
+  if(val===null)return;
+  const trimmed=val.trim();
+  if(trimmed){
+    S.timetable[key]=trimmed;
+    el.textContent=trimmed;
+    el.classList.add('filled');
+    const slot=parseInt(key.split('-')[1]);
+    el.style.background=SLOT_COLORS[slot];
+    el.style.borderColor=SLOT_COLORS[slot];
   } else {
-    closeSlider();
+    delete S.timetable[key];
+    el.textContent='';
+    el.classList.remove('filled');
+    el.style.background='';
+    el.style.borderColor='';
   }
 }
 
-function closeSlider() {
-  document.getElementById('slider-popup').classList.remove('show');
-}
-
-// ── RECORD ──
-function openRecord() {
-  document.getElementById('record-popup').classList.add('show');
-}
-
-function closeRecord() {
-  document.getElementById('record-popup').classList.remove('show');
-}
-
-function saveRecord() {
-  const amount = document.getElementById('rec-amount').value;
-  const cat = document.getElementById('rec-cat').value;
-  const type = document.getElementById('rec-type').value;
-  if (!amount) { closeRecord(); return; }
-
-  // Add to finance list visually
-  const card = document.querySelector('#page-finance .card:last-child');
-  const item = document.createElement('div');
-  item.className = 'finance-item';
-  const sign = type === '支出' ? '−' : '+';
-  const cls = type === '支出' ? 'exp' : 'inc';
-  item.innerHTML = `<span class="finance-cat">${cat}</span><span class="finance-amount ${cls}">${sign}${parseInt(amount).toLocaleString()}</span>`;
-  const divider = card.querySelector('.divider');
-  if (type === '支出') card.appendChild(item);
-  else card.insertBefore(item, divider);
-
-  closeRecord();
-}
-
-// ── SAVINGS EDIT ──
-function updateSavings() {
-  const now = parseInt(document.getElementById('savings-now').textContent.replace(/,/g,'')) || 0;
-  const goal = parseInt(document.getElementById('savings-goal').textContent.replace(/,/g,'')) || 100000;
-  const pct = Math.min(100, Math.round(now / goal * 100));
-  // Update ring
-  const circle = document.querySelector('.ring-container circle:last-child');
-  const circumference = 2 * Math.PI * 32;
-  const offset = circumference * (1 - pct / 100);
-  circle.setAttribute('stroke-dashoffset', offset.toFixed(2));
-  document.querySelector('.ring-pct').textContent = pct + '%';
+// ── Home tiles ──
+function updateHomeTiles(){
+  const all=S.courses.filter(c=>c.status!=='planned');
+  const total=all.reduce((a,b)=>a+b.credits,0);
+  document.getElementById('home-credits').textContent=total;
+  document.getElementById('home-total').textContent=S.credits.total;
 }
 </script>
 </body>
